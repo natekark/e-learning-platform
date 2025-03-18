@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/8831557fe7.js" crossorigin="anonymous"></script>
+  <title>Interactive Courses Platform</title>
+  <style>
+    /* Modern CSS Styles */
+    /* Add Course Form Styles */
+    #addCourseForm {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      margin-top: 1rem;
+    }
+
+    #addCourseForm input,
+    #addCourseForm textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: var(--text-color);
+    }
+
+    #addCourseForm textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    #addCourseForm button[type="submit"] {
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #addCourseForm button[type="submit"]:hover {
+      background: #2980b9;
+    }
+
+    #addCourseBtn {
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #addCourseBtn:hover {
+      background: #2980b9;
+    }
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #e74c3c;
+      --text-color: #2c3e50;
+      --light-bg: #ecf0f1;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light-bg);
+      color: var(--text-color);
+    }
+
+    main {
+      padding: 3rem 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 2.5rem;
+    }
+
+    .courses-grid {
+      display: grid;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .course-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      cursor: pointer;
+      min-width: 18rem;
+      max-width: 20rem;
+      display: grid;
+    }
+
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .course-image {
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .course-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+
+    .course-title {
+      font-size: 1.3rem;
+      margin: 0 0 1rem;
+      color: var(--primary-color);
+    }
+
+    .course-description {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+    .bothbuttons {
+      margin-top: auto;
+    }
+
+    .course-detail {
+      display: none;
+      margin-top: 2rem;
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .course-detail.active {
+      display: block;
+    }
+
+    .video-container {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .video-container iframe {
+      width: 100%;
+      height: 200px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .test-section {
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    .test-btn {
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .test-btn:hover {
+      background: #c0392b;
+    }
+
+    .test-result {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      color: var(--primary-color);
+    }
+
+    .test-questions {
+      margin-top: 2rem;
+      text-align: left;
+    }
+
+    .test-questions h3 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .test-questions label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .test-questions input[type="radio"] {
+      margin-right: 0.5rem;
+    }
+
+    .back-btn {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+
+    .back-btn:hover {
+      background: #1a252f;
+    }
+    .mainSearch ::placeholder{
+      color: #ffffff;
+    }
+    ::placeholder{
+      color: black;
+    }
+    .test-question {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+
+    .test-question input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .test-question input[type="text"]::placeholder {
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <header class="headerr">
+    <h3>gyaan_e</h3>
+    <div class="mainSearch">
+      <form id="searchForVid" action="search.html" method="GET">
+        <input id="searchvid" name="q" placeholder="Search" type="text">
+        <button type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+    <nav>
+      <ul class="nav_links">
+        <li><a href="index.html">Feed</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="community.html">Community</a></li>
+        <button id="authLink"></button>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Explore Our Courses</h1>
+  
+    <!-- Add Course Button (only for admin) -->
+    <div id="addCourseSection" style="display: none;">
+      <button id="addCourseBtn" onclick="showAddCourseForm()">Add Course</button>
+      <div id="addCourseForm" style="display: none; margin-top: 1rem;">
+        <form onsubmit="event.preventDefault(); addCourse();">
+          <input type="text" id="courseTitle" placeholder="Course Title" required>
+          <textarea id="courseDescription" placeholder="Course Description" required></textarea>
+          <input type="text" id="courseImage" placeholder="Image URL" required>
+          <input type="text" id="courseVideos" placeholder="YouTube Video IDs (comma-separated)" required>
+          <input type="text" id="courseTags" placeholder="Enter tags (comma-separated)" required>
+
+          <!-- Test Section -->
+          <div id="testQuestionsContainer">
+            <h3>Add Test Questions</h3>
+            <div class="test-question">
+              <input type="text" class="question" placeholder="Question" required>
+              <input type="text" class="option1" placeholder="Option 1" required>
+              <input type="text" class="option2" placeholder="Option 2" required>
+              <input type="text" class="option3" placeholder="Option 3" required>
+              <input type="text" class="option4" placeholder="Option 4" required>
+              <input type="text" class="correctAnswer" placeholder="Correct Answer (e.g., Option 1)" required>
+            </div>
+          </div>
+          <button type="button" onclick="addQuestion()">Add Another Question</button>
+
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Courses Grid -->
+    <div class="courses-grid" id="coursesContainer"></div>
+  
+    <!-- Course Detail Section -->
+    <div id="courseDetail" class="course-detail">
+      <button class="back-btn" onclick="hideCourseDetail()">Close</button>
+      <h2 id="detailCourseTitle"></h2>
+      <p id="detailCourseDescription"></p>
+      <div class="video-container" id="detailCourseVideos"></div>
+    </div>
+  </main>
+
+  <script>
+    // Enroll in a course
+    async function enrollCourse(courseId) {
+      const response = await fetch('/check-login', { credentials: 'include' });
+      const data = await response.json();
+
+      if (!data.loggedIn) {
+        window.location.href = 'login.html'; // Redirect to login page
+        return;
+      }
+
+      const enrollResponse = await fetch('/enroll-course', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ courseId }),
+        credentials: 'include'
+      });
+
+      const enrollData = await enrollResponse.json();
+      if (enrollData.success) {
+        alert('Course has been added to your profile!');
+      } else {
+        alert('Error enrolling in the course.');
+      }
+    }
+
+    // Fetch and display courses
+    async function loadCourses() {
+      const response = await fetch('/courses');
+      const data = await response.json();
+
+      if (data.success) {
+        const container = document.getElementById('coursesContainer');
+        container.innerHTML = ''; // Clear existing courses
+
+        data.courses.forEach((course) => {
+          const card = document.createElement('div');
+          card.className = 'course-card';
+          card.innerHTML = `
+            <div class="course-image" style="background-image: url('${course.image}')"></div>
+            <div class="course-content">
+              <h3 class="course-title">${course.title}</h3>
+              <p class="course-description">${course.description}</p>
+              <div style="display: flex; gap: 10px;" class="bothbuttons">
+                <button class="enroll-btn" onclick="showCourseDetail('${course._id}')">Details</button>
+                <button class="enroll-btn" onclick="enrollCourse('${course._id}')">Enroll Now</button>
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+    }
+
+    // Show course details
+    async function showCourseDetail(courseId) {
+      const response = await fetch(`/courses/${courseId}`);
+      const data = await response.json();
+
+      if (data.success) {
+        const course = data.course;
+        const courseDetail = document.getElementById('courseDetail');
+        const detailCourseTitle = document.getElementById('detailCourseTitle');
+        const detailCourseDescription = document.getElementById('detailCourseDescription');
+        const detailCourseVideos = document.getElementById('detailCourseVideos');
+
+        detailCourseTitle.textContent = course.title;
+        detailCourseDescription.textContent = course.description;
+        detailCourseVideos.innerHTML = '';
+
+        // Display only the first two videos
+        course.videos.slice(0, 2).forEach((videoId) => {
+          const iframe = document.createElement('iframe');
+          iframe.src = `https://www.youtube.com/embed/${videoId}`;
+          iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+          detailCourseVideos.appendChild(iframe);
+        });
+
+        // Add "and more..." text if there are more than two videos
+        if (course.videos.length > 2) {
+          const moreText = document.createElement('p');
+          moreText.textContent = 'and more...';
+          moreText.style.textAlign = 'center';
+          moreText.style.marginTop = '1rem';
+          detailCourseVideos.appendChild(moreText);
+        }
+
+        // Add "Enroll Now" button
+        const enrollButton = document.createElement('button');
+        enrollButton.textContent = 'Enroll Now';
+        enrollButton.className = 'enroll-btn';
+        enrollButton.style.marginTop = '1rem';
+        enrollButton.onclick = () => enrollCourse(courseId);
+        detailCourseVideos.appendChild(enrollButton);
+
+        courseDetail.classList.add('active');
+      }
+    }
+
+    // Hide course details
+    function hideCourseDetail() {
+      document.getElementById('courseDetail').classList.remove('active');
+    }
+
+    // Show the "Add Course" form
+    function showAddCourseForm() {
+      const form = document.getElementById('addCourseForm');
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Add a new course
+    async function addCourse() {
+      const title = document.getElementById('courseTitle').value;
+      const description = document.getElementById('courseDescription').value;
+      const image = document.getElementById('courseImage').value;
+      const videos = document.getElementById('courseVideos').value.split(',').map(v => v.trim());
+      const tags = document.getElementById('courseTags').value.split(',').map(tag => tag.trim());
+
+      // Collect test questions
+      const testQuestions = [];
+      const questionElements = document.querySelectorAll('.test-question');
+      questionElements.forEach((questionElement) => {
+        const question = questionElement.querySelector('.question').value;
+        const option1 = questionElement.querySelector('.option1').value;
+        const option2 = questionElement.querySelector('.option2').value;
+        const option3 = questionElement.querySelector('.option3').value;
+        const option4 = questionElement.querySelector('.option4').value;
+        const correctAnswer = questionElement.querySelector('.correctAnswer').value;
+
+        testQuestions.push({
+          question,
+          options: [option1, option2, option3, option4],
+          correctAnswer
+        });
+      });
+
+      const response = await fetch('/add-course', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description, image, videos, tags, test: testQuestions })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert('Course added successfully!');
+        loadCourses(); // Refresh the course list
+      } else {
+        alert('Error adding course.');
+      }
+    }
+
+    // Check if the user is admin and show the "Add Course" button
+    async function checkAdmin() {
+      const response = await fetch('/check-login', { credentials: 'include' });
+      const data = await response.json();
+
+      if (data.loggedIn && data.username === 'admin') {
+        document.getElementById('addCourseSection').style.display = 'block';
+      }
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCourses();
+      checkAdmin();
+    });
+
+    async function updateNavBar() {
+      const response = await fetch('/check-login', { credentials: 'include' });
+      const data = await response.json();
+
+      const authLink = document.getElementById('authLink');
+      if (data.loggedIn) {
+        authLink.innerHTML = `<a href="profile.html">Profile</a>`;
+      } else {
+        authLink.innerHTML = `<a href="login.html">Login</a>`;
+      }
+    }
+
+    // Function to add a new question field
+    function addQuestion() {
+      const testQuestionsContainer = document.getElementById('testQuestionsContainer');
+      const newQuestion = document.createElement('div');
+      newQuestion.className = 'test-question';
+      newQuestion.innerHTML = `
+        <input type="text" class="question" placeholder="Question" required>
+        <input type="text" class="option1" placeholder="Option 1" required>
+        <input type="text" class="option2" placeholder="Option 2" required>
+        <input type="text" class="option3" placeholder="Option 3" required>
+        <input type="text" class="option4" placeholder="Option 4" required>
+        <input type="text" class="correctAnswer" placeholder="Correct Answer (e.g., Option 1)" required>
+      `;
+      testQuestionsContainer.appendChild(newQuestion);
+    }
+
+    // Call this function on page load
+    window.onload = function () {
+      updateNavBar();
+    };
+  </script>
+</body>
+</html>

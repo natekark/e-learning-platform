@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/8831557fe7.js" crossorigin="anonymous"></script>
+  <style>
+    /* Courses Section */
+    .courses-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .course-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      min-width: 250px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .course-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .course-card h3 {
+      font-size: 1.2rem;
+      margin: 0;
+      color: #2c3e50;
+    }
+    #videoContainer {
+      display: flex;
+      justify-content: center; /* Center the video container */
+      flex-wrap: wrap; /* Allow wrapping for smaller screens */
+      margin: 0 120px 0 120px;
+      gap: 0px; /* Adds space between video items */
+    }
+
+    /* Video Item Styles */
+    .video-item {
+      margin: 0px;
+      text-align: center;
+      border: none;
+      overflow: hidden; /* Ensure rounded edges */
+      width: calc(25% - 40px); /* Set width to ensure 4 videos per row */
+      background-color: transparent;
+    }
+
+    .video-item img {
+      width: 320px; /* Full width */
+      border-radius: 20px; /* Rounded edges */
+      height: 180px; /* Set a fixed height for uniformity */
+      object-fit: cover; /* Ensures the image covers the area without distortion */
+    }
+
+    .video-item h3 {
+      font-size: 16px;
+      margin: 5px 0 0px 0; /* Space around title */
+      border: none; /* Remove any border */
+      padding: 5px; /* Padding for spacing */
+      color: #000000;
+      font-weight: 500; /* Same font weight as navbar */
+      text-decoration: none; /* No underline */
+      text-overflow: ellipsis; /* Adds "..." if text overflows */
+    }
+
+    /* Remove underline from video titles */
+    .video-item a {
+      text-decoration: none; /* No underline for links */
+    }
+
+    .video-container .video-item {
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      cursor: pointer;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .video-container .video-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .video-container .video-item img {
+      margin-top: 10px;
+    }
+
+    .video-container .video-item img:hover {
+      scale: 1.01;
+      transition: 1s ease;
+    }
+
+    /* Style for no videos found message */
+    .no-videos {
+      text-align: center;
+      font-size: 18px;
+      color: #666;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header class="headerr">
+    <h3>gyaan_e</h3>
+    <div class="mainSearch">
+      <form id="searchForVid" action="search.html" method="GET">
+        <input id="searchvid" name="q" placeholder="Search" type="text">
+        <button type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+    <nav>
+      <ul class="nav_links">
+        <li><a href="index.html">Feed</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="community.html">Community</a></li>
+        <button id="authLink"></button>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Courses Section -->
+    <h2 id="coursesHeading"></h2>
+    <div id="coursesContainer">
+      <div class="courses-scroll" id="coursesScroll"></div>
+    </div>
+    <div class="mainContainer">
+      <h2 id="resultsHeading">Search Results</h2>
+    </div>
+    <div class="video-container" id="videoContainer"></div>
+  </main>
+
+  <footer></footer>
+
+  <script>
+    const educationalKeywords = [
+      "tutorial", "lecture", "course", "how to", "education", "learn", "study", 
+      "class", "lesson", "explain", "guide", "introduction", "basics", "advanced", 
+      "math", "science", "history", "programming", "language", "physics", "chemistry", 
+      "biology", "economics", "literature", "art", "music", "engineering", "technology",
+      "academics", "training", "workshop", "seminar", "webinar", "e-learning", "school",
+      "college", "university", "degree", "diploma", "certificate", "exam", "test", 
+      "quiz", "assessment", "homework", "assignment", "project", "research", 
+      "thesis", "dissertation", "syllabus", "curriculum", "professor", "teacher", 
+      "instructor", "mentor", "student", "pupil", "scholar", "scholarship", 
+      "textbook", "notebook", "notes", "lecture notes", "MOOC", "self-study", 
+      "educational video", "documentary", "learning path", "study guide", "flashcards", 
+      "revision", "exam preparation", "problem-solving", "practice questions", "MCQs",
+      "coding", "data structures", "algorithms", "computer science", "software development", 
+      "AI", "machine learning", "deep learning", "robotics", "cybersecurity", "networking", 
+      "hardware", "cloud computing", "web development", "app development", "statistics", 
+      "algebra", "calculus", "geometry", "trigonometry", "probability", "accounting", 
+      "finance", "business studies", "marketing", "law", "psychology", "sociology", 
+      "geography", "political science", "astronomy", "environmental science", "medicine", 
+      "nursing", "philosophy", "ethics", "critical thinking", "public speaking", 
+      "debate", "communication skills", "presentation skills"
+    ];
+    // Function to fetch courses based on search query
+    async function fetchCourses(query) {
+      try {
+        const response = await fetch(`/search-courses?tags=${encodeURIComponent(query)}`);
+        const data = await response.json();
+
+        console.log('Courses API Response:', data); // Log the response
+
+        const coursesScroll = document.getElementById('coursesScroll');
+        const coursesHeading = document.getElementById('coursesHeading'); // Get the courses heading element
+        coursesScroll.innerHTML = ''; // Clear existing content
+
+        // Set the courses heading
+        coursesHeading.textContent = `Showing courses for "${query}"`;
+
+        if (data.success && data.courses.length > 0) {
+          data.courses.forEach(course => {
+            const courseCard = document.createElement('div');
+            courseCard.className = 'course-card';
+            courseCard.innerHTML = `
+              <img src="${course.image}" alt="${course.title}">
+              <h3>${course.title}</h3>
+              <p>${course.description}</p>
+            `;
+            coursesScroll.appendChild(courseCard);
+          });
+        } else {
+          coursesScroll.innerHTML = '<p class="no-videos">No courses found matching your search.</p>';
+        }
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    }
+
+    // Function to fetch videos from YouTube Data API
+    async function fetchVideos(query) {
+      const apiKey = 'AIzaSyAJtx7qkZUPFmu70XA2LQHfzbwmK6RBpxs';
+      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=24&key=${apiKey}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const videoContainer = document.getElementById('videoContainer');
+        videoContainer.innerHTML = ''; // Clear existing content
+
+        // Update the results heading
+        const resultsHeading = document.getElementById('resultsHeading');
+        resultsHeading.textContent = `Showing results for "${query}"`;
+
+        let hasVideos = false; // Flag to check if any videos are displayed
+
+        data.items.forEach(item => {
+          const title = item.snippet.title.toLowerCase();
+          const description = item.snippet.description.toLowerCase();
+
+          // Count the number of matching educational keywords
+          const matchingKeywords = educationalKeywords.filter(keyword => 
+            title.includes(keyword) || description.includes(keyword)
+          ).length;
+
+          // Only include videos with at least 2 matching keywords
+          if (matchingKeywords >= 2) {
+            const videoElement = document.createElement('div');
+            videoElement.className = 'video-item';
+            videoElement.setAttribute('data-video-id', item.id.videoId); // Add videoId as data attribute
+            videoElement.setAttribute('data-title', item.snippet.title); // Add title as data attribute
+            videoElement.setAttribute('data-thumbnail', item.snippet.thumbnails.medium.url); // Add thumbnail as data attribute
+            videoElement.innerHTML = `
+              <img src="${item.snippet.thumbnails.medium.url}" alt="${item.snippet.title}">
+              <h3>${item.snippet.title}</h3>
+            `;
+            videoContainer.appendChild(videoElement);
+            hasVideos = true; // Set flag to true if at least one video is added
+          }
+        });
+
+        // If no videos are found, display a message
+        if (!hasVideos) {
+          videoContainer.innerHTML = `<p class="no-videos">No appropriate videos found matching your search.</p>`;
+        }
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+        alert('Failed to fetch videos.');
+      }
+    }
+
+    // Add event listener for video clicks
+    document.getElementById('videoContainer').addEventListener('click', async (event) => {
+      const videoElement = event.target.closest('.video-item');
+
+      if (videoElement) {
+        const videoId = videoElement.dataset.videoId; // Get videoId from data attribute
+        const title = videoElement.dataset.title; // Get title from data attribute
+        const thumbnail = videoElement.dataset.thumbnail; // Get thumbnail from data attribute
+
+        // Send video details to the backend
+        try {
+          const response = await fetch('/add-to-history', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ videoId, title, thumbnail }),
+            credentials: 'include' // Include cookies for session
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to save video to history');
+          }
+
+          const data = await response.json();
+          console.log(data.message); // "Video added to history"
+
+          // Redirect to player.html with the video ID as a query parameter
+          window.location.href = `player.html?videoId=${videoId}`;
+
+        } catch (error) {
+          console.error('Error saving video to history:', error);
+          window.location.href = `player.html?videoId=${videoId}`;
+        }
+      }
+    });
+
+    // Read the search query from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('q');
+
+    if (query) {
+      fetchCourses(query); // Fetch and display courses
+      fetchVideos(query); // Fetch and display videos
+    } else {
+      document.getElementById('noResultsMessage').style.display = 'block';
+    }
+
+    async function updateNavBar() {
+      const response = await fetch('/check-login', { credentials: 'include' });
+      const data = await response.json();
+
+      const authLink = document.getElementById('authLink');
+      if (data.loggedIn) {
+        authLink.innerHTML = `<a href="profile.html">Profile</a>`;
+      } else {
+        authLink.innerHTML = `<a href="login.html">Login</a>`;
+      }
+    }
+
+    // Call this function on page load
+    window.onload = function () {
+      updateNavBar();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript for Beginners - Course</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Custom styles for this course page */
+    main {
+      display: flex;
+      padding: 40px;
+      gap: 40px;
+    }
+    /* Left column for the course title */
+    .course-title {
+      flex: 1;
+      max-width: 25%;
+      max-height: 250px;
+      background-color: #f8f8f8;
+      padding: 20px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    /* Right column for the video list */
+    .video-container {
+      flex: 3;
+      max-width: 75%;
+      background-color: #ffffff;
+      padding: 20px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    .video-item {
+      margin: 15px;
+      text-align: center;
+      align-items: center;
+      border-radius: 10px; /* Rounded edges */
+      overflow: hidden; /* Ensure rounded edges */
+      width: calc(100% - 40px);
+      height: 180px;
+      background-color: #fff; /* White background for videos */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+      display: flex;
+      align-items: center;
+    }
+    .video-number {
+      font-size: 24px;
+      margin-right: 5px;
+      width: 40px;
+      text-align: center;
+    }
+    .video-item img {
+      width: 320px; /* Full width */
+      height: 100%; /* Set a fixed height for uniformity */
+      object-fit: cover; /* Ensures the image covers the area without distortion */
+      border-radius: 10px 0 0 10px;
+      overflow: hidden;
+      align-items: center;
+    }
+    .video-item h3 {
+      margin-left: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <!-- Reusing the same navbar -->
+  <nav>
+    <ul>
+      <li><a href="home.html">Feed</a></li>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="#" id="logout">Logout</a></li>
+      <li><a href="/profile">Profile</a></li>
+    </ul>
+  </nav>
+
+  <!-- Course content -->
+  <main>
+    <!-- Left side: Course Title -->
+    <div class="course-title">
+      <h2>JavaScript for Beginners</h2>
+      <p>This course will take you through the basics of JavaScript programming.</p>
+    </div>
+
+    <!-- Right side: Video Playlist -->
+    <div class="video-container" id="videoContainer"></div>
+  </main>
+
+  <footer></footer>
+
+  <script>
+    const videos = [
+      { id: 'xwKbtUP87Dk', title: 'JavaScript Basics in 10 Minutes' },
+      { id: 'PkZNo7MFNFg', title: 'Learn JavaScript - Full Course for Beginners' },
+      { id: 'Q33KBiDriJY', title: 'JavaScript DOM Manipulation Tutorial' }
+    ];
+
+    const videoContainer = document.getElementById('videoContainer');
+
+    videos.forEach((video, index) => {
+      const videoElement = document.createElement('div');
+      videoElement.className = 'video-item';
+      videoElement.innerHTML = `
+        <div class="video-number">${index + 1}</div>
+        <a href="https://www.youtube.com/watch?v=${video.id}" target="_blank">
+          <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="${video.title}">
+        </a>
+        <h3>${video.title}</h3>
+      `;
+      videoContainer.appendChild(videoElement);
+    });
+
+    // Logout functionality
+    document.getElementById('logout').addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default link behavior
+      sessionStorage.clear(); // Clear session storage
+      window.location.href = 'index.html'; // Redirect to index.html
+    });
+  </script>
+</body>
+</html>

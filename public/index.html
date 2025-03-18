@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Learning Platform</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/8831557fe7.js" crossorigin="anonymous"></script>
+  <style>
+
+    #videoContainer {
+      display: flex;
+      justify-content: center; /* Center the video container */
+      flex-wrap: wrap; /* Allow wrapping for smaller screens */
+      margin: 0 120px;
+      gap: 0.5rem; /* Adds space between video items */
+    }
+
+    /* Video Item Styles */
+    .video-item {
+        margin: 0px;
+        text-align: center;
+        border: none;
+        overflow: hidden; /* Ensure rounded edges */
+        width: calc(25% - 40px); /* Set width to ensure 4 videos per row */
+        background-color: transparent;
+        
+    }
+
+    .video-item img {
+        width: 320px; /* Full width */
+        border-radius: 20px; /* Rounded edges */
+        height: 180px; /* Set a fixed height for uniformity */
+        object-fit: cover; /* Ensures the image covers the area without distortion */
+    }
+
+    .video-item h3 {
+      font-size: 16px;
+      margin: 5px 0 0px 0; /* Space around title */
+      border: none; /* Remove any border */
+      padding: 5px; /* Padding for spacing */
+      color: #000000;
+      font-weight: 500; /* Same font weight as navbar */
+      text-decoration: none; /* No underline */
+      text-overflow: ellipsis; /* Adds "..." if text overflows */
+    }
+
+    /* Remove underline from video titles */
+    .video-item a {
+      text-decoration: none; /* No underline for links */
+    }
+    .video-container .video-item {
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      cursor: pointer;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    
+    .video-container .video-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .video-container .video-item img {
+      margin-top: 10px;
+    }
+    .video-container .video-item img:hover {
+      scale: 1.01;
+      transition: 1s ease;
+    }
+
+    .mainContainer {
+      display: flex;
+      flex-direction: row;
+      margin: 0 auto;
+      gap: 1rem;
+      padding: 4rem 16rem;
+      background: linear-gradient(120deg, rgba(120, 188, 178, 0.5) 0%, rgba(255, 255, 255, 0) 30%, rgba(222, 200, 246, 0.5) 60%, rgba(105, 21, 195, 0) 120%);
+      margin-bottom: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+    /* Banner Styles */
+    .banner {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 4rem 2rem; /* Adjusted padding */
+      margin: 0 10%; /* Adjusted margin for better centering */
+    }
+
+    .bannertext {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      padding-right: 2rem; /* Space between text and image */
+    }
+
+    .bannertext h1 {
+      font-size: 52px;
+      color: #1b2732; /* Darker text color for better contrast */
+      text-align: right;
+    }
+    .h2 {
+      font-size: 52px;
+      color: #1b2732; /* Darker text color for better contrast */
+    }
+    .bannertext p {
+      font-size: 18px;
+      color: #555; /* Slightly lighter text color */
+      margin-top: 30px;
+      text-align: right;
+    }
+
+    .bannertext button {
+      margin-top: 30px;
+    }
+
+    .bannerimg {
+      display: flex;
+      justify-content: flex-end; /* Align image to the right */
+    }
+
+    .bannerimg img {
+      width: 100%;
+      height: auto; /* Maintain aspect ratio */
+    }
+    .idk {
+      background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjc2IiBoZWlnaHQ9IjIyIiB2aWV3Qm94PSIwIDAgMjc2IDIyIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMSA4Ljc3NTA1QzM2LjQzMzEgNi4zNTU5NyAxNjUuNDA5IDEuNjUxMDMgMjcxIDguNzc1MDhDMjE2LjE4OSA4Ljc3NTA3IDE0NC43NzYgOS40OTU0NCA5OC43OTUzIDE3IiBzdHJva2U9IiMwQjgwOEQiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==);
+      background-repeat: no-repeat;
+      background-position: 0px 100%;
+      background-size: 100% 35px;
+      padding-bottom: 24px;
+      white-space: nowrap;
+    }
+    .nav_links a{
+      text-decoration: none;
+      color: #ffffff; /* Navbar tab color */
+      font-weight: 500;
+      transition: all 0.3s ease 0s;
+    }
+
+    .nav_links button{
+      padding: 8px 14px;
+      margin-left: 24px;
+    }
+    h3 {
+      margin: auto 0 10px 0;
+      padding: 0;
+      color: #ffffff;
+      font-size: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="headerr">
+    <h3>gyaan_e</h3>
+    <div class="mainSearch">
+      <form id="searchForVid" action="search.html" method="GET">
+        <input id="searchvid" name="q" placeholder="Search" type="text">
+        <button type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+    <nav>
+      <ul class="nav_links">
+        <li><a href="#" id="feed">Feed</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="community.html">Community</a></li>
+        <button id="authLink"></button>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <div class="mainContainer">
+      <div class="bannertext">
+        <h1>Enhance Your Skills with <span class="idk">Our Courses</span></h1>
+        <p>Explore a variety of topics and learn at your own pace.</p>
+        <a href="/courses.html"><button>Try Now</button></a>
+      </div>
+      <div class="bannerimg">
+        <img src="images/bg.png" alt="">
+      </div>
+    </div>
+    <h2>Educational Videos
+      <button id="refreshVideos" style="background-color: transparent; padding: 16px; vertical-align: middle; font-size: 30px;">
+        <i class="fa-solid fa-arrows-rotate" style="color: #07a8d1;"></i>
+      </button>
+    </h2>
+    <div class="video-container" id="videoContainer"></div>
+  </main>
+
+  <footer></footer>
+
+  <script>
+    // Fetch and display videos dynamically
+    async function loadVideos() {
+      try {
+        const response = await fetch('/get-videos'); // Fetch video list from the server
+        const data = await response.json();
+
+        // Ensure response contains the expected format
+        if (!data.success || !Array.isArray(data.videos)) {
+          throw new Error("Invalid response format");
+        }
+
+        const videoData = data.videos;
+        const videoContainer = document.getElementById('videoContainer');
+        videoContainer.innerHTML = ''; // Clear existing videos
+
+        videoData.forEach(video => {
+          const videoElement = document.createElement('div');
+          videoElement.className = 'video-item';
+          videoElement.setAttribute('data-video-id', video.videoId);
+          videoElement.setAttribute('data-title', video.title);
+          videoElement.setAttribute('data-thumbnail', video.thumbnail);
+          videoElement.innerHTML = `
+    <img src="${video.thumbnail}" alt="${video.title}">
+    <h3>${video.title}</h3>
+  `;
+          videoContainer.appendChild(videoElement);
+        });
+      } catch (error) {
+        console.error('Error loading videos:', error);
+        alert('Failed to load videos.');
+      }
+    }
+
+    // Load videos on page load
+    loadVideos();
+
+    // Add event listener for video clicks
+    document.getElementById('videoContainer').addEventListener('click', async (event) => {
+      const videoElement = event.target.closest('.video-item');
+
+      if (videoElement) {
+        const videoId = videoElement.dataset.videoId;
+        const title = videoElement.dataset.title;
+        const thumbnail = videoElement.dataset.thumbnail;
+
+        // Send video details to the backend
+        try {
+          const response = await fetch('/add-to-history', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ videoId, title, thumbnail }),
+            credentials: 'include' // Include cookies for session
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to save video to history');
+          }
+
+          const data = await response.json();
+          console.log(data.message); // "Video added to history"
+
+          // Redirect to player.html with the video ID as a query parameter
+          window.location.href = `player.html?videoId=${videoId}`;
+
+        } catch (error) {
+          console.error('Error saving video to history:', error);
+          window.location.href = `player.html?videoId=${videoId}`;
+        }
+      }
+    });
+
+    // Refresh videos dynamically
+    document.getElementById('refreshVideos').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/refresh-videos', {
+          method: 'POST',
+          credentials: 'include' // Include cookies for session
+        });
+        const result = await response.json();
+        if (result.success) {
+          alert('Videos refreshed successfully!');
+          loadVideos(); // Reload videos without refreshing the page
+        } else {
+          alert('Failed to refresh videos.');
+        }
+      } catch (error) {
+        console.error('Error refreshing videos:', error);
+        alert('An error occurred.');
+      }
+    });
+
+    // Feed button functionality - Reload the homepage
+    document.getElementById('feed').addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent the default link behavior
+      location.reload(); // Reload the current page (homepage)
+    });
+
+    // Check login status and update the navigation bar
+    async function updateNavBar() {
+      const response = await fetch('/check-login', { credentials: 'include' });
+      const data = await response.json();
+
+      const authLink = document.getElementById('authLink');
+      if (data.loggedIn) {
+        authLink.innerHTML = `<a href="profile.html">Profile</a>`;
+      } else {
+        authLink.innerHTML = `<a href="login.html">Login</a>`;
+      }
+    }
+
+    // Call this function on page load
+    window.onload = function () {
+      updateNavBar();
+    };
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/8831557fe7.js" crossorigin="anonymous"></script>
+  <style>
+    /* General layout for the page */
+    main {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      gap: 20px;
+      margin: 2rem 20%;
+    }
+    /* Left column for posts (75% width) */
+    .posts-container {
+      padding: 20px;
+    }
+    /* Individual post style */
+    .post {
+      background-color: #ffffff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+    /* Username style */
+    .post .username {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    /* Right column for creating a post (25% width) */
+    .create-post {
+      background-color: #ffffff;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      border-radius: 8px;
+    }
+    /* Style for the post form */
+    .create-post textarea {
+      width: 95%;
+      height: 100px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+    .create-post button {
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+    }
+    .create-post button:hover {
+      background-color: #0056b3;
+    }
+    /* Style for the reply button */
+    .reply-button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .reply-button:hover {
+      background-color: #0056b3;
+    }
+    /* Style for the replies container */
+    .replies-container {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      display: none; /* Hidden by default */
+    }
+    /* Style for the reply form */
+    .reply-form textarea {
+      width: 95%;
+      height: 60px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+    .reply-form button {
+      padding: 5px 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .reply-form button:hover {
+      background-color: #218838;
+    }
+    /* Style for individual replies */
+    .reply {
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #ffffff;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    .reply .username {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header class="headerr">
+    <h3>gyaan_e</h3>
+    <div class="mainSearch">
+      <form id="searchForVid" action="search.html" method="GET">
+        <input id="searchvid" name="q" placeholder="Search" type="text">
+        <button type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+    <nav>
+      <ul class="nav_links">
+        <li><a href="index.html">Feed</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="community.html">Community</a></li>
+        <button id="authLink"></button>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Community Page Content -->
+  <main>
+    <!-- Right Column: Create Post -->
+    <div class="create-post">
+      <h3>Create a Post</h3>
+      <form id="createPostForm">
+        <textarea id="postContent" placeholder="What's on your mind?"></textarea>
+        <button type="submit">Post</button>
+      </form>
+    </div>
+    <!-- Left Column: Posts Display -->
+    <div class="posts-container" id="postsContainer">
+      <!-- Posts will be dynamically added here -->
+    </div>
+
+
+    
+  </main>
+
+  <footer></footer>
+
+  <!-- Add the script here -->
+  <script>
+    // Function to get the logged-in username from the session
+    function getUsername() {
+      return fetch('/get-username')
+        .then(response => response.json())
+        .then(data => data.username)
+        .catch(() => 'user1'); // Fallback to 'user1' if the session is not available
+    }
+
+    // Handle post creation
+    document.getElementById('createPostForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const postContent = document.getElementById('postContent').value;
+      const username = await getUsername();
+
+      fetch('/create-post', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, content: postContent })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Clear the post input field
+          document.getElementById('postContent').value = '';
+
+          // Fetch and display the new list of posts
+          loadPosts();
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    });
+
+    // Function to load and display posts
+    function loadPosts() {
+      fetch('/posts')
+        .then(response => response.json())
+        .then(posts => {
+          const postsContainer = document.getElementById('postsContainer');
+          postsContainer.innerHTML = ''; // Clear the container before displaying new posts
+
+          posts.reverse().forEach(post => {
+            const postElement = document.createElement('div');
+            postElement.classList.add('post');
+            postElement.innerHTML = `
+              <p class="username">@${post.username}</p>
+              <p>${post.content}</p>
+              <button class="reply-button">Replies</button>
+              <div class="replies-container">
+                <div class="replies-list"></div>
+                <form class="reply-form">
+                  <textarea class="reply-content" placeholder="Write a reply..."></textarea>
+                  <button type="submit">Submit Reply</button>
+                </form>
+              </div>
+            `;
+            postsContainer.appendChild(postElement);
+
+            // Add event listener for the reply button
+            const replyButton = postElement.querySelector('.reply-button');
+            const repliesContainer = postElement.querySelector('.replies-container');
+            replyButton.addEventListener('click', () => {
+              repliesContainer.style.display = repliesContainer.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Add event listener for the reply form
+            const replyForm = postElement.querySelector('.reply-form');
+            replyForm.addEventListener('submit', async function(event) {
+              event.preventDefault();
+              const replyContent = postElement.querySelector('.reply-content').value;
+              const username = await getUsername();
+
+              fetch('/create-reply', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ postId: post._id, username, content: replyContent })
+              })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  // Clear the reply input field
+                  postElement.querySelector('.reply-content').value = '';
+
+                  // Fetch and display the updated replies
+                  loadReplies(post._id, postElement.querySelector('.replies-list'));
+                }
+              })
+              .catch(error => console.error('Error:', error));
+            });
+
+            // Load replies for this post
+            loadReplies(post._id, postElement.querySelector('.replies-list'));
+          });
+        });
+    }
+
+    // Function to load and display replies for a post
+    function loadReplies(postId, repliesList) {
+      fetch(`/replies?postId=${postId}`)
+        .then(response => response.json())
+        .then(replies => {
+          repliesList.innerHTML = ''; // Clear the replies list before displaying new replies
+
+          replies.forEach(reply => {
+            const replyElement = document.createElement('div');
+            replyElement.classList.add('reply');
+            replyElement.innerHTML = `
+              <p class="username">@${reply.username}</p>
+              <p>${reply.content}</p>
+            `;
+            repliesList.appendChild(replyElement);
+          });
+        });
+    }
+
+    // Load posts when the page loads
+    document.addEventListener('DOMContentLoaded', loadPosts);
+
+      async function updateNavBar() {
+      const response = await fetch('/check-login', { credentials: 'include' });
+      const data = await response.json();
+
+      const authLink = document.getElementById('authLink');
+      if (data.loggedIn) {
+        authLink.innerHTML = `<a href="profile.html">Profile</a>`;
+      } else {
+        authLink.innerHTML = `<a href="login.html">Login</a>`;
+      }
+    }
+
+    // Call this function on page load
+    window.onload = function () {
+      updateNavBar();
+    };
+  </script>
+</body>
+</html>

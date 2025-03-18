@@ -1,0 +1,103 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Learning Platform</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/8831557fe7.js" crossorigin="anonymous"></script>
+  <style>
+    /* Centering and full-screen support */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    /* Video container */
+    .player-container {
+        width: 90%;
+        max-width: 900px;
+        aspect-ratio: 16 / 9;
+        background-color: #000;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        margin-top: 20px;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="headerr">
+    <h3>gyaan_e</h3>
+    <div class="mainSearch">
+      <form id="searchForVid" action="search.html" method="GET">
+        <input id="searchvid" name="q" placeholder="Search" type="text">
+        <button type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+    <nav>
+      <ul class="nav_links">
+        <li><a href="index.html">Feed</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="community.html">Community</a></li>
+        <button id="authLink"></button>
+      </ul>
+    </nav>
+  </header>
+    <main>
+    <!-- Video player container -->
+    <div class="player-container">
+        <iframe id="youtube-iframe" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+    </div>
+    </main>
+
+  <footer></footer>
+
+  <script>
+    function getVideoId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('videoId');
+        }
+
+        const videoId = getVideoId();
+        if (videoId) {
+            document.getElementById('youtube-iframe').src = 
+                `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&showinfo=0&autoplay=1&controls=1`;
+        } else {
+            console.error("No videoId provided in the URL.");
+        }
+
+      async function updateNavBar() {
+      const response = await fetch('/check-login', { credentials: 'include' });
+      const data = await response.json();
+
+      const authLink = document.getElementById('authLink');
+      if (data.loggedIn) {
+        authLink.innerHTML = `<a href="profile.html">Profile</a>`;
+      } else {
+        authLink.innerHTML = `<a href="login.html">Login</a>`;
+      }
+    }
+
+    // Call this function on page load
+    window.onload = function () {
+      updateNavBar();
+    };
+  </script>
+</body>
+</html>
