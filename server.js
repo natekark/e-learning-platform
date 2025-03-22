@@ -83,11 +83,17 @@ const courseSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   image: { type: String, required: true },
-  videos: [{ type: String, required: true }], // Array of YouTube video IDs
-  tags: [{ type: String }], // Array of tags for the course
-  createdBy: { type: String, default: 'admin' }, // Track who created the course
-  enrollmentCount: { type: Number, default: 0 }, // Track the number of enrollments
-  creditsRequired: { type: Number, default: 0 }, //  creditsRequired field
+  videos: [{ type: String, required: true }],
+  tags: [{ type: String }],
+  createdBy: { type: String, default: 'admin' },
+  enrollmentCount: { type: Number, default: 0 },
+  creditsRequired: { type: Number, default: 0 }, // Credits required for the course
+  ratings: [
+    {
+      username: { type: String, required: true },
+      rating: { type: Number, required: true, min: 1, max: 5 }
+    }
+  ], // Array of user ratings
   test: [
     {
       question: { type: String, required: true },
@@ -679,6 +685,30 @@ app.post('/generate-certificate', async (req, res) => {
     res.json({ success: true, message: 'Certificate issued successfully!' });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Error generating certificate.' });
+  }
+});
+
+app.post('/submit-rating', async (req, res) => {
+  const { courseId, username, rating } = req.body;
+
+  try {
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found.' });
+    }
+
+    // Check if the user has already rated the course
+    const existingRatingIndex = course.ratings.findIndex(r => r.username === username);
+    if (existingRatingIndex !== -1) {
+      course.ratings[existingRatingIndex].rating = rating; // Update existing rating
+    } else {
+      course.ratings.push({ username, rating }); // Add new rating
+    }
+
+    await course.save();
+    res.json({ success: true, message: 'Rating submitted successfully!' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Error submitting rating.' });
   }
 });
 

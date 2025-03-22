@@ -288,7 +288,8 @@
           <input type="text" id="courseImage" placeholder="Image URL" required>
           <input type="text" id="courseVideos" placeholder="YouTube Video IDs (comma-separated)" required>
           <input type="text" id="courseTags" placeholder="Enter tags (comma-separated)" required>
-
+          <input type="number" id="creditsRequired" placeholder="Credits Required (0 for free)" required min="0">
+      
           <!-- Test Section -->
           <div id="testQuestionsContainer">
             <h3>Add Test Questions</h3>
@@ -302,7 +303,7 @@
             </div>
           </div>
           <button type="button" onclick="addQuestion()">Add Another Question</button>
-
+      
           <button type="submit">Submit</button>
         </form>
       </div>
@@ -363,6 +364,14 @@
             <div class="course-content">
               <h3 class="course-title">${course.title}</h3>
               <p class="course-description">${course.description}</p>
+              <div class="course-meta">
+                <div class="course-rating">
+                  ${getRatingStars(course.ratings)} <!-- Display stars based on average rating -->
+                </div>
+                <div class="course-cost">
+                  ${course.creditsRequired === 0 ? 'Free' : `${course.creditsRequired} Credits`}
+                </div>
+              </div>
               <div style="display: flex; gap: 10px;" class="bothbuttons">
                 <button class="enroll-btn" onclick="showCourseDetail('${course._id}')">Details</button>
                 <button class="enroll-btn" onclick="enrollCourse('${course._id}')">Enroll Now</button>
@@ -372,6 +381,14 @@
           container.appendChild(card);
         });
       }
+    }
+
+    // Helper function to calculate and display rating stars
+    function getRatingStars(ratings) {
+      if (ratings.length === 0) return 'No ratings yet';
+      const averageRating = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
+      const fullStars = Math.round(averageRating);
+      return '&#9733;'.repeat(fullStars) + '&#9734;'.repeat(5 - fullStars);
     }
 
     // Show course details
@@ -437,6 +454,7 @@
       const image = document.getElementById('courseImage').value;
       const videos = document.getElementById('courseVideos').value.split(',').map(v => v.trim());
       const tags = document.getElementById('courseTags').value.split(',').map(tag => tag.trim());
+      const creditsRequired = parseInt(document.getElementById('creditsRequired').value);
 
       // Collect test questions
       const testQuestions = [];
@@ -459,7 +477,7 @@
       const response = await fetch('/add-course', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description, image, videos, tags, test: testQuestions })
+        body: JSON.stringify({ title, description, image, videos, tags, creditsRequired, test: testQuestions })
       });
 
       const data = await response.json();
