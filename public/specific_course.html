@@ -138,270 +138,124 @@
       <div id="completionBar">
         <div id="completionProgress"></div>
       </div>
-      <button id="certificateBtn" style="display: none;">Get Certificate</button>
+      <button id="certificateBtn" style="display: flex;">Get Certificate</button>
       <div class="video-container" id="videoContainer"></div>
     </div>
   </main>
 
-  <!-- Test Modal -->
-  <div id="testModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center;">
-    <div style="background: white; padding: 2rem; border-radius: 10px; width: 80%; max-width: 600px;">
-      <h2>Course Test</h2>
-      <form id="testForm">
-        <div id="testQuestions"></div>
-        <button type="submit" style="margin-top: 1rem;">Submit Test</button>
-      </form>
-      <button onclick="closeTestModal()" style="margin-top: 1rem;">Close</button>
-    </div>
-  </div>
-
   <script>
-    const apiKey = 'AIzaSyAJtx7qkZUPFmu70XA2LQHfzbwmK6RBpxs'; // Replace with your YouTube API key
+const apiKey = 'AIzaSyAJtx7qkZUPFmu70XA2LQHfzbwmK6RBpxs'; // Replace with your YouTube API key
 
-    // Fetch video details (title) from YouTube API
-    async function fetchVideoDetails(videoId) {
-      const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      return data.items[0].snippet.title; // Return the video title
-    }
+// Fetch video details (title) from YouTube API
+async function fetchVideoDetails(videoId) {
+  const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data.items[0].snippet.title; // Return the video title
+}
 
-    // Fetch course details based on the courseId in the URL
-    async function loadCourseDetails() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const courseId = urlParams.get('courseId');
-
-      if (!courseId) {
-        alert('Course ID not found in URL.');
-        return;
-      }
-
-      const response = await fetch(`/courses/${courseId}`);
-      const data = await response.json();
-
-      if (data.success) {
-        const course = data.course;
-        const courseDetails = document.getElementById('courseDetails');
-        courseDetails.innerHTML = `
-          <div class="course-image" style="background-image: url('${course.image}')"></div>
-          <h1>${course.title}</h1>
-          <p class="course-description">${course.description}</p>
-          <div id="completionBar">
-            <div id="completionProgress"></div>
-          </div>
-          <button id="certificateBtn" style="display: none;">Get Certificate</button>
-          <div class="video-container" id="videoContainer"></div>
-        `;
-
-        // Fetch user's completion progress from the backend
-        const userProgressResponse = await fetch(`/user-progress?courseId=${courseId}`, { credentials: 'include' });
-        const userProgressData = await userProgressResponse.json();
-
-        if (userProgressData.success) {
-          const completionPercentage = (userProgressData.completion / course.videos.length) * 100;
-          document.getElementById('completionProgress').style.width = `${completionPercentage}%`;
-
-          if (completionPercentage >= 100) {
-            document.getElementById('certificateBtn').style.display = 'block';
-          }
-        }
-
-        // Fetch and display video thumbnails with titles
-        const videoContainer = document.getElementById('videoContainer');
-        for (let i = 0; i < course.videos.length; i++) {
-          const videoId = course.videos[i];
-          const videoTitle = await fetchVideoDetails(videoId);
-
-          const videoThumbnail = document.createElement('div');
-          videoThumbnail.className = 'video-thumbnail';
-          videoThumbnail.dataset.videoId = videoId;
-          videoThumbnail.innerHTML = `
-            <img src="https://img.youtube.com/vi/${videoId}/0.jpg" alt="Video Thumbnail">
-            <h3>${i + 1}. ${videoTitle}</h3>
-          `;
-          videoContainer.appendChild(videoThumbnail);
-
-          videoThumbnail.addEventListener('click', async () => {
-            const response = await fetch('/add-to-history', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ videoId, title: videoTitle, thumbnail: `https://img.youtube.com/vi/${videoId}/0.jpg`, courseId }),
-              credentials: 'include'
-            });
-
-            if (response.ok) {
-              window.location.href = `player.html?videoId=${videoId}`;
-            } else {
-              alert('Error updating completion progress.');
-            }
-          });
-        }
-      } else {
-        alert('Error fetching course details.');
-      }
-    }
-
-    async function updateNavBar() {
-      const response = await fetch('/check-login', { credentials: 'include' });
-      const data = await response.json();
-
-      const authLink = document.getElementById('authLink');
-      if (data.loggedIn) {
-        authLink.innerHTML = `<a href="profile.html">Profile</a>`;
-      } else {
-        authLink.innerHTML = `<a href="login.html">Login</a>`;
-      }
-    }
-
-    // Function to open the test modal
-    function openTestModal() {
-      document.getElementById('testModal').style.display = 'flex';
-    }
-
-    // Function to close the test modal
-    function closeTestModal() {
-      document.getElementById('testModal').style.display = 'none';
-    }
-
-    // Function to fetch and display the test
-    async function loadTest(courseId) {
-      console.log('loadTest called with courseId:', courseId); // Debugging
-      try {
-        const response = await fetch(`/course-test/${courseId}`);
-        console.log('Response:', response); // Debugging
-        if (!response.ok) {
-          throw new Error('Failed to fetch test.');
-        }
-        const data = await response.json();
-        console.log('Test data:', data); // Debugging
-
-        if (data.success) {
-          const testQuestions = document.getElementById('testQuestions');
-          testQuestions.innerHTML = ''; // Clear existing questions
-
-          data.test.forEach((question, index) => {
-            const questionDiv = document.createElement('div');
-            questionDiv.innerHTML = `
-              <p><strong>Question ${index + 1}:</strong> ${question.question}</p>
-              ${question.options.map((option, i) => `
-                <label>
-                  <input type="radio" name="question${index}" value="${i + 1}">
-                  ${option}
-                </label><br>
-              `).join('')}
-            `;
-            testQuestions.appendChild(questionDiv);
-          });
-
-          openTestModal();
-        } else {
-          alert('Error loading test: ' + data.message);
-        }
-      } catch (error) {
-        console.error('Error loading test:', error);
-        alert('Error loading test. Please try again.');
-      }
-    }
-
-    // Function to handle test submission
-document.getElementById('testForm').addEventListener('submit', async function(event) {
-  event.preventDefault();
-  console.log('Test form submitted'); // Debugging
-
+// Fetch course details based on the courseId in the URL
+async function loadCourseDetails() {
   const urlParams = new URLSearchParams(window.location.search);
   const courseId = urlParams.get('courseId');
-  const username = await getUsername();
-  console.log('Username:', username); // Debugging
 
-  const answers = [];
-  const testQuestions = document.querySelectorAll('#testQuestions div');
-  let allAnswered = true;
-
-  testQuestions.forEach((question, index) => {
-    const selectedOption = question.querySelector(`input[name="question${index}"]:checked`);
-    if (selectedOption) {
-      answers.push(selectedOption.value);
-    } else {
-      allAnswered = false;
-    }
-  });
-
-  console.log('Answers:', answers); // Debugging
-
-  if (!allAnswered) {
-    alert('Please answer all questions before submitting.');
+  if (!courseId) {
+    alert('Course ID not found in URL.');
     return;
   }
 
-  try {
-    const response = await fetch(`/submit-test/${courseId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, answers })
-    });
+  const response = await fetch(`/courses/${courseId}`);
+  const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error('Failed to submit test.');
+  if (data.success) {
+    const course = data.course;
+    const courseDetails = document.getElementById('courseDetails');
+    courseDetails.innerHTML = `
+      <div class="course-image" style="background-image: url('${course.image}')"></div>
+      <h1>${course.title}</h1>
+      <p class="course-description">${course.description}</p>
+      <div id="completionBar">
+        <div id="completionProgress"></div>
+      </div>
+      <button id="certificateBtn">Get Certificate</button>
+      <div class="video-container" id="videoContainer"></div>
+    `;
+
+    // Fetch user's completion progress from the backend
+    const userProgressResponse = await fetch(`/user-progress?courseId=${courseId}`, { credentials: 'include' });
+    const userProgressData = await userProgressResponse.json();
+
+    if (userProgressData.success) {
+      const completionPercentage = (userProgressData.completion / course.videos.length) * 100;
+      document.getElementById('completionProgress').style.width = `${completionPercentage}%`;
+
+      // Update the certificate button behavior based on completion status
+      const certificateBtn = document.getElementById('certificateBtn');
+      if (completionPercentage >= 100) {
+        certificateBtn.addEventListener('click', () => {
+          window.location.href = `test.html?courseId=${courseId}`;
+        });
+      } else {
+        certificateBtn.addEventListener('click', () => {
+          alert('Please complete the course to get your certificate.');
+        });
+      }
     }
 
-    const data = await response.json();
-    console.log('Test submission response:', data); // Debugging
+    // Fetch and display video thumbnails with titles
+    const videoContainer = document.getElementById('videoContainer');
+    for (let i = 0; i < course.videos.length; i++) {
+      const videoId = course.videos[i];
+      const videoTitle = await fetchVideoDetails(videoId);
 
-    if (data.success) {
-      if (data.passed) {
-        alert(`Congratulations! You scored ${data.percentage}% and passed the test.`);
-        // Generate certificate
-        const certificateResponse = await fetch('/generate-certificate', {
+      const videoThumbnail = document.createElement('div');
+      videoThumbnail.className = 'video-thumbnail';
+      videoThumbnail.dataset.videoId = videoId;
+      videoThumbnail.innerHTML = `
+        <img src="https://img.youtube.com/vi/${videoId}/0.jpg" alt="Video Thumbnail">
+        <h3>${i + 1}. ${videoTitle}</h3>
+      `;
+      videoContainer.appendChild(videoThumbnail);
+
+      videoThumbnail.addEventListener('click', async () => {
+        const response = await fetch('/add-to-history', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, courseId })
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ videoId, title: videoTitle, thumbnail: `https://img.youtube.com/vi/${videoId}/0.jpg`, courseId }),
+          credentials: 'include'
         });
 
-        if (!certificateResponse.ok) {
-          throw new Error('Failed to generate certificate.');
-        }
-
-        const certificateData = await certificateResponse.json();
-        if (certificateData.success) {
-          alert('Certificate issued successfully!');
+        if (response.ok) {
+          window.location.href = `player.html?videoId=${videoId}`;
         } else {
-          alert('Error generating certificate: ' + certificateData.message);
+          alert('Error updating completion progress.');
         }
-      } else {
-        alert(`You scored ${data.percentage}%. You need at least 75% to pass.`);
-      }
-      closeTestModal();
-    } else {
-      alert('Error submitting test: ' + data.message);
-    }
-  } catch (error) {
-    console.error('Error submitting test:', error);
-    alert('Error submitting test. Please try again.');
-  }
-});
-
-    // Add event listener to the "Get Certificate" button
-    const certificateBtn = document.getElementById('certificateBtn');
-    if (!certificateBtn) {
-      console.error('Certificate button not found in the DOM');
-    } else {
-      certificateBtn.addEventListener('click', async function() {
-        console.log('Get Certificate button clicked'); // Debugging
-        const urlParams = new URLSearchParams(window.location.search);
-        const courseId = urlParams.get('courseId');
-        console.log('Course ID:', courseId); // Debugging
-        await loadTest(courseId);
       });
     }
-    
+  } else {
+    alert('Error fetching course details.');
+  }
+}
 
-    // Call this function on page load
-    window.onload = function () {
-      updateNavBar();
-      loadCourseDetails();
-    };
+async function updateNavBar() {
+  const response = await fetch('/check-login', { credentials: 'include' });
+  const data = await response.json();
+
+  const authLink = document.getElementById('authLink');
+  if (data.loggedIn) {
+    authLink.innerHTML = '<a href="profile.html">Profile</a>';
+  } else {
+    authLink.innerHTML = '<a href="login.html">Login</a>';
+  }
+}
+
+// Call this function on page load
+window.onload = function () {
+  updateNavBar();
+  loadCourseDetails();
+};
   </script>
 </body>
 </html>

@@ -489,7 +489,7 @@ reversedHistory.forEach(video => {
             <img src="${course.image}" alt="${course.title}">
             <h3>${course.title}</h3>
             <p>${course.description}</p>
-            <button onclick="window.open('specific_course.html?courseId=${course._id}', '_blank')">Open</button>
+            <button onclick="location.href='specific_course.html?courseId=${course._id}'">Open</button>
           `;
           container.appendChild(courseElement);
         });

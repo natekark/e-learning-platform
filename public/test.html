@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Test</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #2c3e50;
+    }
+
+    #testContainer {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 1.5rem;
+    }
+
+    #testQuestions {
+      margin-bottom: 2rem;
+    }
+
+    .question {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: #f5f5f5;
+      border-radius: 10px;
+    }
+
+    .question p {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .question label {
+      display: block;
+      margin: 0.5rem 0;
+      cursor: pointer;
+    }
+
+    .question input[type="radio"] {
+      margin-right: 0.5rem;
+    }
+
+    button[type="submit"] {
+      display: block;
+      margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #2980b9;
+    }
+
+    #certificateSection {
+      display: none;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    #certificateSection h2 {
+      color: #27ae60;
+    }
+
+    #downloadCertificate {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    #downloadCertificate:hover {
+      background-color: #219653;
+    }
+  </style>
+</head>
+<body>
+  <div id="testContainer">
+    <h1>Course Test</h1>
+    <form id="testForm">
+      <div id="testQuestions"></div>
+      <button type="submit">Submit Test</button>
+    </form>
+    <div id="certificateSection">
+      <h2>Congratulations! You passed the test.</h2>
+      <button id="downloadCertificate">Download Certificate</button>
+    </div>
+  </div>
+
+  <script>
+    // Fetch courseId from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseId = urlParams.get('courseId');
+
+    // Fetch test questions from the backend
+    async function loadTestQuestions() {
+      try {
+        const response = await fetch(`/course-test/${courseId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch test questions.');
+        }
+        const data = await response.json();
+
+        if (data.success) {
+          const testQuestions = document.getElementById('testQuestions');
+          testQuestions.innerHTML = ''; // Clear existing questions
+
+          data.test.forEach((question, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+            questionDiv.innerHTML = `
+              <p><strong>Question ${index + 1}:</strong> ${question.question}</p>
+              ${question.options.map((option, i) => `
+                <label>
+                  <input type="radio" name="question${index}" value="${i + 1}">
+                  ${option}
+                </label><br>
+              `).join('')}
+            `;
+            testQuestions.appendChild(questionDiv);
+          });
+        } else {
+          alert('Error loading test questions: ' + data.message);
+        }
+      } catch (error) {
+        console.error('Error loading test questions:', error);
+        alert('Error loading test questions. Please try again.');
+      }
+    }
+
+    // Handle test submission
+    document.getElementById('testForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const answers = [];
+      const testQuestions = document.querySelectorAll('#testQuestions .question');
+      let allAnswered = true;
+
+      testQuestions.forEach((question, index) => {
+        const selectedOption = question.querySelector(`input[name="question${index}"]:checked`);
+        if (selectedOption) {
+          answers.push(selectedOption.value);
+        } else {
+          allAnswered = false;
+        }
+      });
+
+      if (!allAnswered) {
+        alert('Please answer all questions before submitting.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`/submit-test/${courseId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: 'currentUser', answers }) // Replace 'currentUser' with actual username
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to submit test.');
+        }
+
+        const data = await response.json();
+        if (data.success) {
+          if (data.passed) {
+            // Show certificate section
+            document.getElementById('certificateSection').style.display = 'block';
+            document.getElementById('testForm').style.display = 'none';
+
+            // Generate and download certificate
+            document.getElementById('downloadCertificate').addEventListener('click', function() {
+              generateCertificate(data.percentage);
+            });
+          } else {
+            alert(`You scored ${data.percentage}%. You need at least 75% to pass.`);
+          }
+        } else {
+          alert('Error submitting test: ' + data.message);
+        }
+      } catch (error) {
+        console.error('Error submitting test:', error);
+        alert('Error submitting test. Please try again.');
+      }
+    });
+
+    // Function to generate and download certificate
+    function generateCertificate(percentage) {
+      const certificateContent = `
+        <html>
+          <head>
+            <style>
+              body {
+                font-family: 'Segoe UI', system-ui, sans-serif;
+                text-align: center;
+                padding: 2rem;
+              }
+              h1 {
+                color: #27ae60;
+              }
+              p {
+                font-size: 1.2rem;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>Certificate of Completion</h1>
+            <p>Congratulations! You have successfully completed the course with a score of ${percentage}%.</p>
+          </body>
+        </html>
+      `;
+
+      const blob = new Blob([certificateContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'certificate.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Load test questions when the page loads
+    window.onload = loadTestQuestions;
+  </script>
+</body>
+</html>
