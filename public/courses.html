@@ -277,7 +277,28 @@
 
   <main>
     <h1>Explore Our Courses</h1>
-  
+
+    <!-- Sorting and Filtering Controls -->
+    <div id="sortFilterControls" style="margin-bottom: 2rem; text-align: center;">
+      <!-- Sorting Dropdown -->
+      <label for="sortBy">Sort By:</label>
+      <select id="sortBy" onchange="loadCourses()">
+        <option value="none">None</option>
+        <option value="ratingHighToLow">Rating (High to Low)</option>
+        <option value="ratingLowToHigh">Rating (Low to High)</option>
+        <option value="popularityHighToLow">Popularity (High to Low)</option>
+        <option value="popularityLowToHigh">Popularity (Low to High)</option>
+      </select>
+
+      <!-- Filter Checkboxes -->
+      <label style="margin-left: 1rem;">
+        <input type="checkbox" id="filterFree" onchange="loadCourses()"> Show Only Free Courses
+      </label>
+      <label style="margin-left: 1rem;">
+        <input type="checkbox" id="filterPaid" onchange="loadCourses()"> Show Only Paid Courses
+      </label>
+    </div>
+
     <!-- Add Course Button (only for admin) -->
     <div id="addCourseSection" style="display: none;">
       <button id="addCourseBtn" onclick="showAddCourseForm()">Add Course</button>
@@ -353,10 +374,64 @@
       const data = await response.json();
 
       if (data.success) {
+        let courses = data.courses;
+
+        // Apply Filters
+        const filterFree = document.getElementById('filterFree').checked;
+        const filterPaid = document.getElementById('filterPaid').checked;
+
+        if (filterFree && !filterPaid) {
+          courses = courses.filter(course => course.creditsRequired === 0);
+        } else if (filterPaid && !filterFree) {
+          courses = courses.filter(course => course.creditsRequired > 0);
+        }
+
+        // Apply Sorting
+        const sortBy = document.getElementById('sortBy').value;
+
+        switch (sortBy) {
+          case 'ratingHighToLow':
+            courses.sort((a, b) => {
+              const ratingA = a.ratings.length > 0 ? a.ratings.reduce((sum, r) => sum + r.rating, 0) / a.ratings.length : 0;
+              const ratingB = b.ratings.length > 0 ? b.ratings.reduce((sum, r) => sum + r.rating, 0) / b.ratings.length : 0;
+              return ratingB - ratingA;
+            });
+            break;
+
+          case 'ratingLowToHigh':
+            courses.sort((a, b) => {
+              const ratingA = a.ratings.length > 0 ? a.ratings.reduce((sum, r) => sum + r.rating, 0) / a.ratings.length : 0;
+              const ratingB = b.ratings.length > 0 ? b.ratings.reduce((sum, r) => sum + r.rating, 0) / b.ratings.length : 0;
+              return ratingA - ratingB;
+            });
+            break;
+
+          case 'popularityHighToLow':
+            courses.sort((a, b) => {
+              const popularityA = a.enrollmentCount * (a.ratings.length > 0 ? a.ratings.reduce((sum, r) => sum + r.rating, 0) / a.ratings.length : 1);
+              const popularityB = b.enrollmentCount * (b.ratings.length > 0 ? b.ratings.reduce((sum, r) => sum + r.rating, 0) / b.ratings.length : 1);
+              return popularityB - popularityA;
+            });
+            break;
+
+          case 'popularityLowToHigh':
+            courses.sort((a, b) => {
+              const popularityA = a.enrollmentCount * (a.ratings.length > 0 ? a.ratings.reduce((sum, r) => sum + r.rating, 0) / a.ratings.length : 1);
+              const popularityB = b.enrollmentCount * (b.ratings.length > 0 ? b.ratings.reduce((sum, r) => sum + r.rating, 0) / b.ratings.length : 1);
+              return popularityA - popularityB;
+            });
+            break;
+
+          default:
+            // No sorting
+            break;
+        }
+
+        // Display Courses
         const container = document.getElementById('coursesContainer');
         container.innerHTML = ''; // Clear existing courses
 
-        data.courses.forEach((course) => {
+        courses.forEach((course) => {
           const card = document.createElement('div');
           card.className = 'course-card';
           card.innerHTML = `
