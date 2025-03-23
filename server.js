@@ -10,7 +10,7 @@ const bcrypt = require('bcrypt'); // For password hashing
 
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:3000', // Replace with frontend URL
+  origin: 'https://natekark.github.io/e-learning-platform/public/', // Replace with frontend URL
   credentials: true
 }));
 

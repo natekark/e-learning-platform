@@ -5,7 +5,7 @@ document.getElementById('registrationForm').addEventListener('submit', function(
   const username = document.getElementById('regUsername').value;
   const password = document.getElementById('regPassword').value;
 
-  fetch('/register', {
+  fetch('https://e-learning-platform-jtmk.onrender.com/register', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password })
@@ -28,7 +28,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
   const username = document.getElementById('loginUsername').value;
   const password = document.getElementById('loginPassword').value;
 
-  fetch('/login', {
+  fetch('https://e-learning-platform-jtmk.onrender.com/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password })
@@ -50,7 +50,7 @@ document.getElementById('createPostForm').addEventListener('submit', function(ev
 
   const postContent = document.getElementById('postContent').value;
 
-  fetch('/create-post', {
+  fetch('https://e-learning-platform-jtmk.onrender.com/create-post', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ content: postContent }) // Use 'content' key
@@ -68,7 +68,7 @@ document.getElementById('createPostForm').addEventListener('submit', function(ev
 
 // Function to load posts and display them on the page
 function loadPosts() {
-  fetch('/posts')
+  fetch('https://e-learning-platform-jtmk.onrender.com/posts')
     .then(response => response.json())
     .then(posts => {
       const postsContainer = document.getElementById('postsContainer');
