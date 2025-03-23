@@ -419,7 +419,7 @@ const Video = mongoose.model('Video', videoSchema);
 // Define categories and their associated keywords
 const categories = {
   education: [
-    "tutorial", "lecture", "course", "how to", "education", "learn", "study", 
+    "tutorial", "lecture", "course", "education", "learn", "study", 
     "class", "lesson", "explain", "guide", "introduction", "basics", "advanced", 
     "math", "science", "history", "programming", "language", "physics", "chemistry", 
     "biology", "economics", "literature", "art", "music", "engineering", "technology",
