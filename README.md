@@ -10,6 +10,10 @@ This project is an e-learning platform that provides an interactive and user-fri
 - **Community Forum**: Users can discuss topics and share insights.
 - **Responsive UI**: Designed with Bootstrap for a seamless experience across devices.
 
+## Live Demo
+The platform is live and accessible at:  
+👉 [https://e-learning-platform-jtmk.onrender.com](https://e-learning-platform-jtmk.onrender.com)
+
 ## Tech Stack
 - **Frontend**: HTML, CSS (Bootstrap), JavaScript
 - **Backend**: Node.js, Express.js
@@ -39,6 +43,8 @@ Ensure you have the following installed:
      ```env
      MONGO_URI=your_mongodb_connection_string
      YOUTUBE_API_KEY=your_youtube_api_key
+     SESSION_SECRET=your_session_secret_key
+     PORT=3000
      ```
 4. Start the server:
    ```bash
@@ -50,13 +56,24 @@ Ensure you have the following installed:
    ```
 
 ## Usage
-- **Sign Up/Login** to access the platform.
+- Sign Up/Login to access the platform.
 - Browse through available courses.
 - Watch video lessons and track progress.
 - Participate in discussions within the community forum.
 
+## Screenshots
+### Homepage
+![Homepage](screenshots/homepage.png)  
+*Homepage of the E-Learning Platform*
+
+## Roadmap
+- Add quizzes and assessments for courses.
+- Implement a payment gateway for premium courses.
+- Enhance the community forum with upvoting and tagging features.
+
 ## Contribution
 Contributions are welcome! To contribute:
+
 1. Fork the repository.
 2. Create a new branch:
    ```bash
@@ -70,8 +87,12 @@ Contributions are welcome! To contribute:
 4. Open a Pull Request.
 
 ## License
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+## Acknowledgments
+- YouTube API for providing video content.
+- Bootstrap for the responsive UI design.
+- Render for hosting the platform.
 
 ## Contact
 For any queries or suggestions, feel free to reach out via GitHub Issues.
-
