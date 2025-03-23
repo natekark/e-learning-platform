@@ -421,56 +421,51 @@ const categories = {
   education: [
     "tutorial", "lecture", "course", "education", "learn", "study", 
     "class", "lesson", "explain", "guide", "introduction", "basics", "advanced", 
-    "math", "science", "history", "programming", "language", "physics", "chemistry", 
-    "biology", "economics", "literature", "art", "music", "engineering", "technology",
-    "academics", "training", "workshop", "seminar", "webinar", "e-learning", "school",
-    "college", "university", "degree", "diploma", "certificate", "exam", "test", 
-    "quiz", "assessment", "homework", "assignment", "project", "research", 
-    "thesis", "dissertation", "syllabus", "curriculum", "professor", "teacher", 
-    "instructor", "mentor", "student", "pupil", "scholar", "scholarship", 
-    "textbook", "notebook", "notes", "lecture notes", "MOOC", "self-study", 
-    "educational video", "documentary", "learning path", "study guide", "flashcards", 
-    "revision", "exam preparation", "problem-solving", "practice questions", "MCQs",
-    "coding", "data structures", "algorithms", "computer science", "software development", 
-    "AI", "machine learning", "deep learning", "robotics", "cybersecurity", "networking", 
-    "hardware", "cloud computing", "web development", "app development", "statistics", 
-    "algebra", "calculus", "geometry", "trigonometry", "probability", "accounting", 
-    "finance", "business studies", "marketing", "law", "psychology", "sociology", 
-    "geography", "political science", "astronomy", "environmental science", "medicine", 
-    "nursing", "philosophy", "ethics", "critical thinking", "public speaking", 
-    "debate", "communication skills", "presentation skills"
+    "math", "science", "history", "programming", "physics", "chemistry", 
+    "biology", "economics", "literature", "engineering", "technology",
+    "academics", "training", "workshop", "seminar", "webinar", "e-learning", 
+    "school", "college", "university", "exam", "quiz", "assessment", "homework", 
+    "assignment", "project", "research", "thesis", "dissertation", "syllabus", 
+    "curriculum", "professor", "teacher", "instructor", "student", 
+    "textbook", "notes", "MOOC", "self-study", "educational video", 
+    "study guide", "exam preparation", "problem-solving", "practice questions", 
+    "MCQs", "data structures", "algorithms", "computer science", "software development", 
+    "AI", "machine learning", "robotics", "cybersecurity", "networking", 
+    "cloud computing", "web development", "app development", "statistics", 
+    "algebra", "calculus", "geometry", "trigonometry", "probability", 
+    "finance", "business studies", "law", "psychology", "sociology", 
+    "geography", "political science", "astronomy", "medicine", "nursing", 
+    "philosophy", "ethics", "critical thinking", "public speaking"
   ],
   technology: [
-    "technology", "innovation", "gadgets", "devices", "electronics", "smartphones", 
-    "laptops", "computers", "software", "hardware", "internet", "web", "cloud", 
-    "artificial intelligence", "machine learning", "data science", "big data", 
-    "blockchain", "cryptocurrency", "cybersecurity", "networking", "programming", 
-    "coding", "web development", "app development", "robotics", "automation", 
-    "IoT", "virtual reality", "augmented reality", "gaming", "tech news", "reviews"
+    "software", "hardware", "internet", "cloud computing", "AI", 
+    "machine learning", "data science", "big data", "blockchain", 
+    "cybersecurity", "networking", "web development", "app development", 
+    "robotics", "automation", "IoT", "virtual reality", "augmented reality"
   ],
   programming: [
     "programming", "coding", "software development", "web development", "app development", 
     "data structures", "algorithms", "python", "javascript", "java", "c++", "c#", 
     "ruby", "php", "html", "css", "react", "angular", "vue", "node.js", "django", 
-    "flask", "machine learning", "AI", "data science", "big data", "cloud computing", 
-    "cybersecurity", "devops", "git", "github", "debugging", "best practices", 
-    "tutorial", "course", "how to", "beginner", "advanced", "interview preparation"
+    "flask", "machine learning", "AI", "data science", "cloud computing", 
+    "cybersecurity", "devops", "git", "github", "debugging", "interview preparation"
   ],
   science: [
-    "science", "physics", "chemistry", "biology", "astronomy", "environmental science", 
-    "geology", "meteorology", "neuroscience", "biotechnology", "genetics", "evolution", 
-    "quantum mechanics", "relativity", "space", "universe", "earth", "climate", 
-    "ecology", "scientific research", "experiments", "discoveries", "documentaries", 
-    "science news", "popular science", "science communication", "science education"
+    "physics", "chemistry", "biology", "astronomy", "environmental science", 
+    "geology", "meteorology", "neuroscience", "biotechnology", "genetics", 
+    "evolution", "quantum mechanics", "relativity", "space", "universe", 
+    "climate", "ecology", "scientific research", "experiments", 
+    "science education"
   ],
   business: [
-    "business", "entrepreneurship", "startups", "management", "leadership", "marketing", 
-    "sales", "finance", "accounting", "investing", "stock market", "economy", 
+    "entrepreneurship", "startups", "management", "leadership", "marketing", 
+    "finance", "accounting", "investing", "stock market", "economy", 
     "business strategy", "innovation", "product management", "project management", 
-    "business news", "case studies", "success stories", "business education", 
-    "MBA", "business skills", "networking", "negotiation", "public speaking"
+    "case studies", "business education", "MBA", "business skills", 
+    "networking", "negotiation", "public speaking"
   ]
 };
+
 
 // Route to refresh videos
 app.post('/refresh-videos', async (req, res) => {
