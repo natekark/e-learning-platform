@@ -1,3 +1,4 @@
+require('dotenv').config(); // Load .env variables
 const axios = require('axios');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -18,15 +19,15 @@ app.use(bodyParser.json());
 
 // Set up session middleware
 app.use(session({
-  secret: 'your_secret_key',
+  secret: process.env.SESSION_SECRET, // Use secret from .env
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/LocalMongoDBHtml' }),
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   cookie: { secure: false }
 }));
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/LocalMongoDBHtml', {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
