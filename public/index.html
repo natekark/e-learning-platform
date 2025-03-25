@@ -7,48 +7,136 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://kit.fontawesome.com/8831557fe7.js" crossorigin="anonymous"></script>
   <style>
+    /* Header Styles */
+    .headerr {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: #1b2732;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
+    /* Sidebar Styles */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 78px; /* Below the header */
+      width: 250px;
+      height: calc(100vh - 80px);
+      background-color: #1b2732;
+      color: white;
+      padding: 20px 0;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+      transition: all 0.3s ease;
+      overflow-y: auto;
+    }
+    
+    .sidebar h3 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 1.5rem;
+      padding: 0 20px;
+    }
+    
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .sidebar li {
+      margin-bottom: 10px;
+    }
+    
+    .sidebar a {
+      display: block;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+    }
+    
+    .sidebar a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid #0B808D;
+    }
+    
+    .sidebar a.active {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid #0B808D;
+      font-weight: 500;
+    }
+
+    /* Main Content Styles */
+    main {
+      margin-left: 250px; /* Same as sidebar width */
+      padding-top: 78px; /* Account for fixed header */
+      transition: margin-left 0.3s ease;
+    }
+
+    /* Main Container Styles */
+    .mainContainer {
+      display: flex;
+      flex-direction: row;
+      margin: 0 auto;
+      gap: 1rem;
+      padding: 4rem 16rem;
+      background: linear-gradient(120deg, rgba(120, 188, 178, 0.5) 0%, rgba(255, 255, 255, 0) 30%, rgba(222, 200, 246, 0.5) 60%, rgba(105, 21, 195, 0) 120%);
+      margin-bottom: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Video Container Styles */
     #videoContainer {
       display: flex;
-      justify-content: center; /* Center the video container */
-      flex-wrap: wrap; /* Allow wrapping for smaller screens */
+      justify-content: center;
+      flex-wrap: wrap;
       margin: 0 120px;
-      gap: 0.5rem; /* Adds space between video items */
+      gap: 0.5rem;
     }
 
     /* Video Item Styles */
     .video-item {
-        margin: 0px;
-        text-align: center;
-        border: none;
-        overflow: hidden; /* Ensure rounded edges */
-        width: calc(25% - 40px); /* Set width to ensure 4 videos per row */
-        background-color: transparent;
-        
+      margin: 0px;
+      text-align: center;
+      border: none;
+      overflow: hidden;
+      width: calc(25% - 40px);
+      background-color: transparent;
     }
 
     .video-item img {
-        width: 320px; /* Full width */
-        border-radius: 20px; /* Rounded edges */
-        height: 180px; /* Set a fixed height for uniformity */
-        object-fit: cover; /* Ensures the image covers the area without distortion */
+      width: 320px;
+      border-radius: 20px;
+      height: 180px;
+      object-fit: cover;
     }
 
     .video-item h3 {
       font-size: 16px;
-      margin: 5px 0 0px 0; /* Space around title */
-      border: none; /* Remove any border */
-      padding: 5px; /* Padding for spacing */
+      margin: 5px 0 0px 0;
+      border: none;
+      padding: 5px;
       color: #000000;
-      font-weight: 500; /* Same font weight as navbar */
-      text-decoration: none; /* No underline */
-      text-overflow: ellipsis; /* Adds "..." if text overflows */
+      font-weight: 500;
+      text-decoration: none;
+      text-overflow: ellipsis;
     }
 
-    /* Remove underline from video titles */
     .video-item a {
-      text-decoration: none; /* No underline for links */
+      text-decoration: none;
     }
+
     .video-container .video-item {
       transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
       cursor: pointer;
@@ -64,49 +152,42 @@
     .video-container .video-item img {
       margin-top: 10px;
     }
+
     .video-container .video-item img:hover {
       scale: 1.01;
       transition: 1s ease;
     }
 
-    .mainContainer {
-      display: flex;
-      flex-direction: row;
-      margin: 0 auto;
-      gap: 1rem;
-      padding: 4rem 16rem;
-      background: linear-gradient(120deg, rgba(120, 188, 178, 0.5) 0%, rgba(255, 255, 255, 0) 30%, rgba(222, 200, 246, 0.5) 60%, rgba(105, 21, 195, 0) 120%);
-      margin-bottom: 2rem;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    }
     /* Banner Styles */
     .banner {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      padding: 4rem 2rem; /* Adjusted padding */
-      margin: 0 10%; /* Adjusted margin for better centering */
+      padding: 4rem 2rem;
+      margin: 0 10%;
     }
 
     .bannertext {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      padding-right: 2rem; /* Space between text and image */
+      padding-right: 2rem;
     }
 
     .bannertext h1 {
       font-size: 52px;
-      color: #1b2732; /* Darker text color for better contrast */
+      color: #1b2732;
       text-align: right;
     }
+
     .h2 {
       font-size: 52px;
-      color: #1b2732; /* Darker text color for better contrast */
+      color: #1b2732;
     }
+
     .bannertext p {
       font-size: 18px;
-      color: #555; /* Slightly lighter text color */
+      color: #555;
       margin-top: 30px;
       text-align: right;
     }
@@ -117,13 +198,14 @@
 
     .bannerimg {
       display: flex;
-      justify-content: flex-end; /* Align image to the right */
+      justify-content: flex-end;
     }
 
     .bannerimg img {
       width: 100%;
-      height: auto; /* Maintain aspect ratio */
+      height: auto;
     }
+
     .idk {
       background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjc2IiBoZWlnaHQ9IjIyIiB2aWV3Qm94PSIwIDAgMjc2IDIyIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMSA4Ljc3NTA1QzM2LjQzMzEgNi4zNTU5NyAxNjUuNDA5IDEuNjUxMDMgMjcxIDguNzc1MDhDMjE2LjE4OSA4Ljc3NTA3IDE0NC43NzYgOS40OTU0NCA5OC43OTUzIDE3IiBzdHJva2U9IiMwQjgwOEQiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg==);
       background-repeat: no-repeat;
@@ -132,46 +214,256 @@
       padding-bottom: 24px;
       white-space: nowrap;
     }
-    .nav_links a{
-      text-decoration: none;
-      color: #ffffff; /* Navbar tab color */
-      font-weight: 500;
-      transition: all 0.3s ease 0s;
+
+    .nav_links {
+      display: flex;
+      align-items: center;
     }
 
-    .nav_links button{
+    .nav_links button {
       padding: 8px 14px;
       margin-left: 24px;
     }
+
     h3 {
       margin: auto 0 10px 0;
       padding: 0;
       color: #ffffff;
       font-size: 2rem;
     }
+
+    /* Search Bar Styles */
+    .mainSearch {
+      display: flex;
+      align-items: center;
+    }
+
+    #searchForVid {
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    #searchvid {
+      padding: 8px 15px;
+      border-radius: 20px;
+      outline: none;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    #searchForVid button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* Hamburger Menu and Search Toggle */
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: white;
+      margin-right: 20px;
+    }
+
+    .search-toggle {
+      display: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: white;
+      margin-right: 15px;
+    }
+
+    /* Search Results Styles */
+    .search-results-container {
+      display: none;
+      padding: 1rem;
+      margin: 1rem auto;
+      max-width: 1400px;
+    }
+    
+    .search-active .mainContainer {
+      display: none;
+    }
+    
+    .search-active .video-container:not(.search-results) {
+      display: none;
+    }
+    
+    .search-results {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    
+    /* Courses Section for Search Results */
+    .courses-scroll {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .course-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      min-width: 250px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .course-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .course-card h3 {
+      font-size: 1.2rem;
+      margin: 0;
+      color: #2c3e50;
+    }
+    
+    /* No results message */
+    .no-results, .no-videos {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 1200px) {
+      .mainContainer {
+        padding: 4rem 8rem;
+      }
+      .video-item {
+        width: calc(33.33% - 40px);
+      }
+    }
+
+    @media (max-width: 992px) {
+      .mainContainer {
+        padding: 4rem 4rem;
+      }
+      .sidebar {
+        width: 200px;
+      }
+      main {
+        margin-left: 200px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hamburger, .search-toggle {
+        display: block;
+      }
+      .sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      main {
+        margin-left: 0;
+      }
+      .mainContainer {
+        flex-direction: column;
+        padding: 2rem;
+      }
+      .bannertext {
+        align-items: center;
+        text-align: center;
+        padding-right: 0;
+      }
+      .bannertext h1,
+      .bannertext p {
+        text-align: center;
+      }
+      .video-item {
+        width: calc(50% - 20px);
+      }
+      #videoContainer {
+        margin: 0 20px;
+      }
+      #searchvid {
+        width: 0;
+        padding: 8px 0;
+        opacity: 0;
+        margin-right: 0;
+      }
+      #searchForVid.active #searchvid {
+        width: 150px;
+        padding: 8px 15px;
+        opacity: 1;
+        margin-right: 10px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .video-item {
+        width: 100%;
+      }
+      .mainContainer {
+        padding: 2rem 1rem;
+      }
+      .headerr h3 {
+        font-size: 1.5rem;
+      }
+      main {
+        padding-top: 69px; /* Account for fixed header */
+      }
+      .sidebar{
+        top: 69px;
+      }
+    }
   </style>
 </head>
 <body>
   <header class="headerr">
+    <div class="hamburger"><i class="fa-solid fa-bars"></i></div>
     <h3>gyaan_e</h3>
     <div class="mainSearch">
-      <form id="searchForVid" action="search.html" method="GET">
+      <form id="searchForVid" method="GET">
         <input id="searchvid" name="q" placeholder="Search" type="text">
+        <div class="search-toggle">
         <button type="submit">
           <i class="fa-solid fa-magnifying-glass"></i>
         </button>
+        </div>
       </form>
     </div>
     <nav>
       <ul class="nav_links">
-        <li><a href="#" id="feed">Feed</a></li>
-        <li><a href="courses.html">Courses</a></li>
-        <li><a href="community.html">Community</a></li>
         <button id="authLink"></button>
       </ul>
     </nav>
   </header>
   <main>
+    <div class="sidebar">
+      <ul>
+        <li><a href="#" id="feed-sidebar" class="active">Feed</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="community.html">Community</a></li>
+      </ul>
+    </div>
+    
     <div class="mainContainer">
       <div class="bannertext">
         <h1>Enhance Your Skills with <span class="idk">Our Courses</span></h1>
@@ -182,7 +474,22 @@
         <img src="images/bg.png" alt="">
       </div>
     </div>
-    <h2>Educational Videos
+    
+    <!-- Search results section -->
+    <div id="searchResults" class="search-results-container">
+      
+      
+      <h2 id="coursesHeading"></h3>
+      <div class="courses-scroll" id="coursesScroll"></div>
+      <h2 id="resultsHeading">Search Results</h2>
+      <div class="video-container search-results" id="searchVideosContainer"></div>
+      
+      <div id="noResultsMessage" class="no-results" style="display: none;">
+        <p>No results found for your search.</p>
+      </div>
+    </div>
+    
+    <h2>Browse Some Educational Videos For Free
       <button id="refreshVideos" style="background-color: transparent; padding: 16px; vertical-align: middle; font-size: 30px;">
         <i class="fa-solid fa-arrows-rotate" style="color: #07a8d1;"></i>
       </button>
@@ -193,20 +500,192 @@
   <footer></footer>
 
   <script>
-    // Fetch and display videos dynamically
-    async function loadVideos() {
+    const educationalKeywords = [
+      "tutorial", "lecture", "course", "how to", "education", "learn", "study", 
+      "class", "lesson", "explain", "guide", "introduction", "basics", "advanced", 
+      "math", "science", "history", "programming", "language", "physics", "chemistry", 
+      "biology", "economics", "literature", "art", "music", "engineering", "technology",
+      "academics", "training", "workshop", "seminar", "webinar", "e-learning", "school",
+      "college", "university", "degree", "diploma", "certificate", "exam", "test", 
+      "quiz", "assessment", "homework", "assignment", "project", "research", 
+      "thesis", "dissertation", "syllabus", "curriculum", "professor", "teacher", 
+      "instructor", "mentor", "student", "pupil", "scholar", "scholarship", 
+      "textbook", "notebook", "notes", "lecture notes", "MOOC", "self-study", 
+      "educational video", "documentary", "learning path", "study guide", "flashcards", 
+      "revision", "exam preparation", "problem-solving", "practice questions", "MCQs",
+      "coding", "data structures", "algorithms", "computer science", "software development", 
+      "AI", "machine learning", "deep learning", "robotics", "cybersecurity", "networking", 
+      "hardware", "cloud computing", "web development", "app development", "statistics", 
+      "algebra", "calculus", "geometry", "trigonometry", "probability", "accounting", 
+      "finance", "business studies", "marketing", "law", "psychology", "sociology", 
+      "geography", "political science", "astronomy", "environmental science", "medicine", 
+      "nursing", "philosophy", "ethics", "critical thinking", "public speaking", 
+      "debate", "communication skills", "presentation skills"
+    ];
+
+    // Function to fetch courses based on search query
+    async function fetchCourses(query) {
       try {
-        const response = await fetch('/get-videos'); // Fetch video list from the server
+        const response = await fetch(`/search-courses?tags=${encodeURIComponent(query)}`);
         const data = await response.json();
 
-        // Ensure response contains the expected format
+        console.log('Courses API Response:', data);
+
+        const coursesScroll = document.getElementById('coursesScroll');
+        const coursesHeading = document.getElementById('coursesHeading');
+        coursesScroll.innerHTML = '';
+
+        coursesHeading.textContent = `Showing courses for "${query}"`;
+
+        if (data.success && data.courses.length > 0) {
+          data.courses.forEach(course => {
+            const courseCard = document.createElement('div');
+            courseCard.className = 'course-card';
+            courseCard.innerHTML = `
+              <img src="${course.image}" alt="${course.title}">
+              <h3>${course.title}</h3>
+              <p>${course.description}</p>
+            `;
+            coursesScroll.appendChild(courseCard);
+          });
+        } else {
+          coursesScroll.innerHTML = '<p class="no-videos">No courses found matching your search.</p>';
+        }
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    }
+
+    // Function to fetch videos from YouTube Data API
+    async function fetchVideos(query) {
+      const apiKey = 'AIzaSyAJtx7qkZUPFmu70XA2LQHfzbwmK6RBpxs';
+      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=24&key=${apiKey}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const videoContainer = document.getElementById('searchVideosContainer');
+        videoContainer.innerHTML = '';
+
+        const resultsHeading = document.getElementById('resultsHeading');
+        resultsHeading.textContent = `Showing results for "${query}"`;
+
+        let hasVideos = false;
+
+        data.items.forEach(item => {
+          const title = item.snippet.title.toLowerCase();
+          const description = item.snippet.description.toLowerCase();
+
+          const matchingKeywords = educationalKeywords.filter(keyword => 
+            title.includes(keyword) || description.includes(keyword)
+          ).length;
+
+          if (matchingKeywords >= 2) {
+            const videoElement = document.createElement('div');
+            videoElement.className = 'video-item';
+            videoElement.setAttribute('data-video-id', item.id.videoId);
+            videoElement.setAttribute('data-title', item.snippet.title);
+            videoElement.setAttribute('data-thumbnail', item.snippet.thumbnails.medium.url);
+            videoElement.innerHTML = `
+              <img src="${item.snippet.thumbnails.medium.url}" alt="${item.snippet.title}">
+              <h3>${item.snippet.title}</h3>
+            `;
+            videoContainer.appendChild(videoElement);
+            hasVideos = true;
+          }
+        });
+
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        if (!hasVideos) {
+          noResultsMessage.style.display = 'block';
+        } else {
+          noResultsMessage.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+        document.getElementById('noResultsMessage').style.display = 'block';
+      }
+    }
+
+    // Handle search form submission
+    document.getElementById('searchForVid').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const query = document.getElementById('searchvid').value.trim();
+      
+      if (query) {
+        document.getElementById('searchResults').style.display = 'block';
+        document.body.classList.add('search-active');
+        
+        fetchCourses(query);
+        fetchVideos(query);
+        
+        // Update URL without reloading
+        history.pushState({}, '', `?q=${encodeURIComponent(query)}`);
+      }
+    });
+
+    // Add event listener for video clicks in search results
+    document.getElementById('searchVideosContainer').addEventListener('click', async (event) => {
+      const videoElement = event.target.closest('.video-item');
+
+      if (videoElement) {
+        const videoId = videoElement.dataset.videoId;
+        const title = videoElement.dataset.title;
+        const thumbnail = videoElement.dataset.thumbnail;
+
+        try {
+          const response = await fetch('/add-to-history', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ videoId, title, thumbnail }),
+            credentials: 'include'
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to save video to history');
+          }
+
+          const data = await response.json();
+          console.log(data.message);
+          window.location.href = `player.html?videoId=${videoId}`;
+        } catch (error) {
+          console.error('Error saving video to history:', error);
+          window.location.href = `player.html?videoId=${videoId}`;
+        }
+      }
+    });
+
+    // Function to clear search results and return to normal view
+    function clearSearchResults() {
+      document.getElementById('searchResults').style.display = 'none';
+      document.body.classList.remove('search-active');
+      document.getElementById('searchvid').value = '';
+      history.pushState({}, '', window.location.pathname);
+    }
+
+    // Add click handler to the feed sidebar button to clear search results
+    document.getElementById('feed-sidebar').addEventListener('click', function(event) {
+      event.preventDefault();
+      clearSearchResults();
+      location.reload();
+    });
+
+    // Load regular videos
+    async function loadVideos() {
+      try {
+        const response = await fetch('/get-videos');
+        const data = await response.json();
+
         if (!data.success || !Array.isArray(data.videos)) {
           throw new Error("Invalid response format");
         }
 
         const videoData = data.videos;
         const videoContainer = document.getElementById('videoContainer');
-        videoContainer.innerHTML = ''; // Clear existing videos
+        videoContainer.innerHTML = '';
 
         videoData.forEach(video => {
           const videoElement = document.createElement('div');
@@ -215,9 +694,9 @@
           videoElement.setAttribute('data-title', video.title);
           videoElement.setAttribute('data-thumbnail', video.thumbnail);
           videoElement.innerHTML = `
-    <img src="${video.thumbnail}" alt="${video.title}">
-    <h3>${video.title}</h3>
-  `;
+            <img src="${video.thumbnail}" alt="${video.title}">
+            <h3>${video.title}</h3>
+          `;
           videoContainer.appendChild(videoElement);
         });
       } catch (error) {
@@ -226,39 +705,28 @@
       }
     }
 
-    // Load videos on page load
-    loadVideos();
-
-    // Add event listener for video clicks
+    // Video click handler for regular videos
     document.getElementById('videoContainer').addEventListener('click', async (event) => {
       const videoElement = event.target.closest('.video-item');
 
       if (videoElement) {
         const videoId = videoElement.dataset.videoId;
-        const title = videoElement.dataset.title;
-        const thumbnail = videoElement.dataset.thumbnail;
-
-        // Send video details to the backend
         try {
           const response = await fetch('/add-to-history', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ videoId, title, thumbnail }),
-            credentials: 'include' // Include cookies for session
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              videoId,
+              title: videoElement.dataset.title,
+              thumbnail: videoElement.dataset.thumbnail
+            }),
+            credentials: 'include'
           });
 
-          if (!response.ok) {
-            throw new Error('Failed to save video to history');
-          }
-
+          if (!response.ok) throw new Error('Failed to save video to history');
           const data = await response.json();
-          console.log(data.message); // "Video added to history"
-
-          // Redirect to player.html with the video ID as a query parameter
+          console.log(data.message);
           window.location.href = `player.html?videoId=${videoId}`;
-
         } catch (error) {
           console.error('Error saving video to history:', error);
           window.location.href = `player.html?videoId=${videoId}`;
@@ -266,17 +734,17 @@
       }
     });
 
-    // Refresh videos dynamically
+    // Refresh videos
     document.getElementById('refreshVideos').addEventListener('click', async () => {
       try {
         const response = await fetch('/refresh-videos', {
           method: 'POST',
-          credentials: 'include' // Include cookies for session
+          credentials: 'include'
         });
         const result = await response.json();
         if (result.success) {
           alert('Videos refreshed successfully!');
-          loadVideos(); // Reload videos without refreshing the page
+          loadVideos();
         } else {
           alert('Failed to refresh videos.');
         }
@@ -286,30 +754,63 @@
       }
     });
 
-    // Feed button functionality - Reload the homepage
-    document.getElementById('feed').addEventListener('click', function(event) {
-      event.preventDefault(); // Prevent the default link behavior
-      location.reload(); // Reload the current page (homepage)
-    });
-
-    // Check login status and update the navigation bar
+    // Check login status
     async function updateNavBar() {
       const response = await fetch('/check-login', { credentials: 'include' });
       const data = await response.json();
-
       const authLink = document.getElementById('authLink');
-      if (data.loggedIn) {
-        authLink.innerHTML = `<a href="profile.html">Profile</a>`;
-      } else {
-        authLink.innerHTML = `<a href="login.html">Login</a>`;
-      }
+      authLink.innerHTML = data.loggedIn ? 
+        `<a href="profile.html">Profile</a>` : 
+        `<a href="login.html">Login</a>`;
     }
 
-    // Call this function on page load
-    window.onload = function () {
-      updateNavBar();
-    };
+    // Sidebar toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.querySelector('.hamburger');
+      const sidebar = document.querySelector('.sidebar');
+      const searchToggle = document.querySelector('.search-toggle');
+      const searchForm = document.getElementById('searchForVid');
+      
+      hamburger.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+      });
 
+      searchToggle.addEventListener('click', function() {
+        searchForm.classList.toggle('active');
+        if (searchForm.classList.contains('active')) {
+          document.getElementById('searchvid').focus();
+        }
+      });
+
+      function checkScreenSize() {
+        if (window.innerWidth <= 768) {
+          sidebar.classList.remove('active');
+        } else {
+          sidebar.classList.add('active');
+        }
+      }
+      
+      checkScreenSize();
+      window.addEventListener('resize', checkScreenSize);
+    });
+
+    // Initial load
+    window.onload = function() {
+      updateNavBar();
+      loadVideos();
+      
+      // Check if there's a search query in the URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get('q');
+      
+      if (query) {
+        document.getElementById('searchvid').value = query;
+        document.getElementById('searchResults').style.display = 'block';
+        document.body.classList.add('search-active');
+        fetchCourses(query);
+        fetchVideos(query);
+      }
+    };
   </script>
 </body>
 </html>

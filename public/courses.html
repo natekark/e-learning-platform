@@ -7,6 +7,121 @@
   <script src="https://kit.fontawesome.com/8831557fe7.js" crossorigin="anonymous"></script>
   <title>Interactive Courses Platform</title>
   <style>
+    /* Header Styles */
+    .headerr {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: #1b2732;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 78px; /* Below the header */
+      width: 250px;
+      height: calc(100vh - 80px);
+      background-color: #1b2732;
+      color: white;
+      padding: 20px 0;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+      transition: all 0.3s ease;
+      overflow-y: auto;
+    }
+    
+    .sidebar h3 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 1.5rem;
+      padding: 0 20px;
+    }
+    
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .sidebar li {
+      margin-bottom: 10px;
+    }
+    
+    .sidebar a {
+      display: block;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+    }
+    
+    .sidebar a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid #0B808D;
+    }
+    
+    .sidebar a.active {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid #0B808D;
+      font-weight: 500;
+    }
+
+    /* Main Content Styles */
+    main {
+      margin-left: 250px; /* Same as sidebar width */
+      padding-top: 78px; /* Account for fixed header */
+      transition: margin-left 0.3s ease;
+    }
+
+    /* Course Search Bar Styles */
+    .course-search-container {
+      display: flex;
+      justify-content: center;
+      margin: 2rem auto;
+      max-width: 600px;
+    }
+
+    #courseSearchForm {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      max-height: 42px;
+    }
+
+    #courseSearchInput {
+      padding: 20px 20px;
+      border-radius: 30px 0 0 30px;
+      border: 1px solid #ddd;
+      outline: none;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    #courseSearchButton {
+      background: #0B808D;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      border-radius: 0 30px 30px 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #courseSearchButton:hover {
+      background: #096b75;
+    }
+
     /* Modern CSS Styles */
     /* Add Course Form Styles */
     #addCourseForm {
@@ -78,12 +193,6 @@
       color: var(--text-color);
     }
 
-    main {
-      padding: 3rem 1.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
     h1, h2 {
       text-align: center;
       color: var(--primary-color);
@@ -138,6 +247,11 @@
       font-size: 0.95rem;
       line-height: 1.5;
       margin-bottom: 1.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3; /* Limit to 3 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .bothbuttons {
       margin-top: auto;
@@ -227,12 +341,7 @@
     .back-btn:hover {
       background: #1a252f;
     }
-    .mainSearch ::placeholder{
-      color: #ffffff;
-    }
-    ::placeholder{
-      color: black;
-    }
+
     .test-question {
       margin-bottom: 1.5rem;
       padding: 1rem;
@@ -252,42 +361,117 @@
     .test-question input[type="text"]::placeholder {
       color: #999;
     }
-    .course-description {
-  color: #666;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* Limit to 3 lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+
+    /* Hamburger Menu */
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: white;
+      margin-right: 20px;
+    }
+
+    .nav_links {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav_links button {
+      padding: 8px 14px;
+      margin-left: 24px;
+    }
+
+    h3 {
+      margin: auto 0 10px 0;
+      padding: 0;
+      color: #ffffff;
+      font-size: 2rem;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 1200px) {
+      .sidebar {
+        width: 200px;
+      }
+      main {
+        margin-left: 200px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hamburger {
+        display: block;
+      }
+      .sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      main {
+        margin-left: 0;
+      }
+      .headerr h3 {
+        font-size: 1.5rem;
+      }
+      .course-search-container{
+        width: 60%;
+      }
+
+    }
+
+    @media (max-width: 576px) {
+      .course-search-container {
+        padding: 1rem;
+      }
+      #courseSearchButton {
+        padding: .5rem;
+      }
+      .course-search-container{
+        width: 40%;
+      }
+      main {
+        padding-top: 69px; /* Account for fixed header */
+      }
+      .sidebar{
+        top: 69px;
+      }
+      
+    }
   </style>
 </head>
 <body>
   <header class="headerr">
+    <div class="hamburger"><i class="fa-solid fa-bars"></i></div>
     <h3>gyaan_e</h3>
-    <div class="mainSearch">
-      <form id="searchForVid" action="search.html" method="GET">
-        <input id="searchvid" name="q" placeholder="Search" type="text">
-        <button type="submit">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-      </form>
-    </div>
     <nav>
       <ul class="nav_links">
-        <li><a href="index.html">Feed</a></li>
-        <li><a href="courses.html">Courses</a></li>
-        <li><a href="community.html">Community</a></li>
         <button id="authLink"></button>
       </ul>
     </nav>
   </header>
 
+  <div class="sidebar">
+    <ul>
+      <li><a href="index.html">Feed</a></li>
+      <li><a href="courses.html" class="active">Courses</a></li>
+      <li><a href="community.html">Community</a></li>
+    </ul>
+  </div>
+
   <main>
     <h1>Explore Our Courses</h1>
+
+    <!-- Course Search Bar -->
+    <div class="course-search-container">
+      <form id="courseSearchForm">
+        <input type="text" id="courseSearchInput" placeholder="Search courses by title or tags...">
+        <button type="submit" id="courseSearchButton">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
 
     <!-- Sorting and Filtering Controls -->
     <div id="sortFilterControls" style="margin-bottom: 2rem; text-align: center;">
@@ -395,6 +579,15 @@
           courses = courses.filter(course => course.creditsRequired === 0);
         } else if (filterPaid && !filterFree) {
           courses = courses.filter(course => course.creditsRequired > 0);
+        }
+
+        // Apply Search Filter
+        const searchQuery = document.getElementById('courseSearchInput').value.toLowerCase();
+        if (searchQuery) {
+          courses = courses.filter(course => 
+            course.title.toLowerCase().includes(searchQuery) || 
+            (course.tags && course.tags.some(tag => tag.toLowerCase().includes(searchQuery)))
+          );
         }
 
         // Apply Sorting
@@ -524,7 +717,7 @@
 
     // Hide course details
     function hideCourseDetail() {
-      document.getElementById('courseDetail').classList.remove('active');
+      document.getElementById('courseDetail').classclassList.remove('active');
     }
 
     // Show the "Add Course" form
@@ -585,24 +778,6 @@
       }
     }
 
-    // Initialize the page
-    document.addEventListener('DOMContentLoaded', () => {
-      loadCourses();
-      checkAdmin();
-    });
-
-    async function updateNavBar() {
-      const response = await fetch('/check-login', { credentials: 'include' });
-      const data = await response.json();
-
-      const authLink = document.getElementById('authLink');
-      if (data.loggedIn) {
-        authLink.innerHTML = `<a href="profile.html">Profile</a>`;
-      } else {
-        authLink.innerHTML = `<a href="login.html">Login</a>`;
-      }
-    }
-
     // Function to add a new question field
     function addQuestion() {
       const testQuestionsContainer = document.getElementById('testQuestionsContainer');
@@ -619,10 +794,52 @@
       testQuestionsContainer.appendChild(newQuestion);
     }
 
-    // Call this function on page load
-    window.onload = function () {
+    // Check login status
+    async function updateNavBar() {
+      const response = await fetch('/check-login', { credentials: 'include' });
+      const data = await response.json();
+
+      const authLink = document.getElementById('authLink');
+      if (data.loggedIn) {
+        authLink.innerHTML = `<a href="profile.html">Profile</a>`;
+      } else {
+        authLink.innerHTML = `<a href="login.html">Login</a>`;
+      }
+    }
+
+    // Sidebar toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.querySelector('.hamburger');
+      const sidebar = document.querySelector('.sidebar');
+      
+      hamburger.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+      });
+
+      function checkScreenSize() {
+        if (window.innerWidth <= 768) {
+          sidebar.classList.remove('active');
+        } else {
+          sidebar.classList.add('active');
+        }
+      }
+      
+      checkScreenSize();
+      window.addEventListener('resize', checkScreenSize);
+    });
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCourses();
+      checkAdmin();
       updateNavBar();
-    };
+      
+      // Add event listener for course search
+      document.getElementById('courseSearchForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        loadCourses();
+      });
+    });
   </script>
 </body>
 </html>
