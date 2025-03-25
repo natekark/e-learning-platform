@@ -474,24 +474,28 @@
     </div>
 
     <!-- Sorting and Filtering Controls -->
-    <div id="sortFilterControls" style="margin-bottom: 2rem; text-align: center;">
+    <div id="sortFilterControls" style="margin-bottom: 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
       <!-- Sorting Dropdown -->
-      <label for="sortBy">Sort By:</label>
-      <select id="sortBy" onchange="loadCourses()">
-        <option value="none">None</option>
-        <option value="ratingHighToLow">Rating (High to Low)</option>
-        <option value="ratingLowToHigh">Rating (Low to High)</option>
-        <option value="popularityHighToLow">Popularity (High to Low)</option>
-        <option value="popularityLowToHigh">Popularity (Low to High)</option>
-      </select>
+      <div>
+        <label for="sortBy">Sort By:</label>
+        <select id="sortBy" onchange="loadCourses()">
+          <option value="none">None</option>
+          <option value="ratingHighToLow">Rating (High to Low)</option>
+          <option value="ratingLowToHigh">Rating (Low to High)</option>
+          <option value="popularityHighToLow">Popularity (High to Low)</option>
+          <option value="popularityLowToHigh">Popularity (Low to High)</option>
+        </select>
+      </div>
 
-      <!-- Filter Checkboxes -->
-      <label style="margin-left: 1rem;">
-        <input type="checkbox" id="filterFree" onchange="loadCourses()"> Show Only Free Courses
-      </label>
-      <label style="margin-left: 1rem;">
-        <input type="checkbox" id="filterPaid" onchange="loadCourses()"> Show Only Paid Courses
-      </label>
+      <!-- Filter Dropdown -->
+      <div>
+        <label for="filterType">Filter:</label>
+        <select id="filterType" onchange="loadCourses()">
+          <option value="all">All Courses</option>
+          <option value="free">Free Courses Only</option>
+          <option value="paid">Paid Courses Only</option>
+        </select>
+      </div>
     </div>
 
     <!-- Add Course Button (only for admin) -->
@@ -572,12 +576,11 @@
         let courses = data.courses;
 
         // Apply Filters
-        const filterFree = document.getElementById('filterFree').checked;
-        const filterPaid = document.getElementById('filterPaid').checked;
+        const filterType = document.getElementById('filterType').value;
 
-        if (filterFree && !filterPaid) {
+        if (filterType === 'free') {
           courses = courses.filter(course => course.creditsRequired === 0);
-        } else if (filterPaid && !filterFree) {
+        } else if (filterType === 'paid') {
           courses = courses.filter(course => course.creditsRequired > 0);
         }
 
