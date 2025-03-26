@@ -7,31 +7,127 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://kit.fontawesome.com/8831557fe7.js" crossorigin="anonymous"></script>
   <style>
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-      color: #2c3e50;
+    /* Header and Sidebar Styles (from profile.html) */
+    .headerr {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: #1b2732;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
-    main {
-      padding: 2rem;
-      max-width: 800px;
-      margin: 0 auto;
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 78px;
+      width: 250px;
+      height: calc(100vh - 80px);
+      background-color: #1b2732;
+      color: white;
+      padding: 20px 0;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+      transition: all 0.3s ease;
+      overflow-y: auto;
+    }
+    
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .sidebar li {
+      margin-bottom: 10px;
+    }
+    
+    .sidebar a {
+      display: block;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+    }
+    
+    .sidebar a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid #0B808D;
+    }
+    
+    .sidebar a.active {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-left: 4px solid #0B808D;
+      font-weight: 500;
+    }
+
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: white;
+      margin-right: 20px;
+    }
+
+    /* Modern UI Variables */
+    :root {
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --text-primary: #1f2937;
+      --text-secondary: #4b5563;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f9fafb;
+      --border-color: #e5e7eb;
+      --border-radius: 12px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+    }
+
+    body {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
     }
 
     h1 {
-      text-align: center;
-      color: #2c3e50;
-      margin-bottom: 1.5rem;
+      color: #000000;
     }
 
+    main {
+      display: flex;
+      flex-direction: column;
+      margin-left: 250px;
+      margin-top: 8rem;
+      transition: margin-left 0.3s ease;
+      padding: var(--space-lg);
+      gap: var(--space-lg);
+    }
+
+    /* Course Details Styles */
     .course-details {
-      background: white;
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-primary);
+      padding: var(--space-xl);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      margin: 0 auto;
+
+      max-width: 1200px;
     }
 
     .course-image {
@@ -39,109 +135,224 @@
       height: 300px;
       background-size: cover;
       background-position: center;
-      border-radius: 10px;
-      margin-bottom: 1.5rem;
+      border-radius: var(--border-radius);
+      margin-bottom: var(--space-lg);
+      box-shadow: var(--shadow-md);
     }
 
     .course-description {
-      font-size: 1rem;
-      line-height: 1.6;
-      color: #666;
-      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-xl);
+      padding: var(--space-md);
+      background-color: var(--bg-secondary);
+      border-radius: var(--border-radius);
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .course-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--space-lg);
+      padding: var(--space-md);
+      background-color: var(--bg-secondary);
+      border-radius: var(--border-radius);
     }
 
     .video-container {
-      display: table;
-      margin-left: auto;
-      margin-right: auto;
-      gap: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: var(--space-md);
     }
 
     .video-thumbnail {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       position: relative;
       cursor: pointer;
-      border-radius: 10px;
+      border-radius: var(--border-radius);
       overflow: hidden;
       transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-      margin-bottom: 1rem;
+      background: var(--bg-primary);
+      box-shadow: var(--shadow-sm);
     }
 
     .video-thumbnail:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      box-shadow: var(--shadow-lg);
     }
 
     .video-thumbnail img {
-      width: 320px;
-      min-width: 320px;
+      width: 100%;
       height: 180px;
       object-fit: cover;
-      border-radius: 10px;
-      margin-right: 1rem;
     }
 
     .video-thumbnail h3 {
       font-size: 1rem;
-      margin: 0.5rem 0;
-      color: #2c3e50;
-      text-align: center;
+      margin: 0;
+      padding: var(--space-md);
+      color: var(--text-primary);
     }
+
+    .video-thumbnail .video-number {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 50%;
+      font-size: 0.8rem;
+    }
+
     #completionBar {
       width: 100%;
       background-color: #e0e0e0;
-      border-radius: 10px;
-      margin-bottom: 1rem;
+      border-radius: var(--border-radius);
+      margin-bottom: var(--space-lg);
+      height: 10px;
     }
 
     #completionProgress {
-      height: 10px;
-      background-color: #3498db;
-      border-radius: 10px;
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: var(--border-radius);
       width: 0%; /* Dynamically updated */
-      max-width: 100%;
+      transition: width 0.3s ease;
     }
 
     #certificateBtn {
-      margin: 1rem auto;
-      background-color: #ff6262;
+      display: block;
+      margin: var(--space-lg) auto;
+      padding: var(--space-md) var(--space-xl);
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
     #certificateBtn:hover {
-      background-color: #c0392b;
+      background-color: #3e8e41;
+      transform: translateY(-2px);
+    }
+
+    #ratingSection {
+      margin-top: var(--space-xl);
+      text-align: center;
+      padding: var(--space-lg);
+      background-color: var(--bg-secondary);
+      border-radius: var(--border-radius);
+    }
+
+    .star {
+      font-size: 1.5rem;
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      margin: 0 2px;
+    }
+
+    .star:hover, .star.active {
+      color: #FFD700;
+    }
+
+    #submitRating {
+      padding: var(--space-sm) var(--space-md);
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #submitRating:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .sidebar {
+        width: 220px;
+      }
+      main {
+        margin-left: 220px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hamburger {
+        display: block;
+      }
+      .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      main {
+        margin-left: 0;
+        margin-top: 4rem;
+      }
+      .video-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .headerr h3 {
+        font-size: 1.5rem;
+      }
+      main {
+        padding-top: 69px;
+      }
+      .sidebar {
+        top: 69px;
+      }
+      .course-image {
+        height: 200px;
+      }
+      .course-meta {
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
     }
   </style>
 </head>
 <body>
   <header class="headerr">
+    <div class="hamburger"><i class="fa-solid fa-bars"></i></div>
     <h3>gyaan_e</h3>
-    <div class="mainSearch">
-      <form id="searchForVid" action="search.html" method="GET">
-        <input id="searchvid" name="q" placeholder="Search" type="text">
-        <button type="submit">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-      </form>
-    </div>
     <nav>
       <ul class="nav_links">
-        <li><a href="index.html">Feed</a></li>
-        <li><a href="courses.html">Courses</a></li>
-        <li><a href="community.html">Community</a></li>
         <button id="authLink"></button>
       </ul>
     </nav>
   </header>
+
+  <div class="sidebar">
+    <ul>
+      <li><a href="index.html">Feed</a></li>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="community.html">Community</a></li>
+    </ul>
+  </div>
 
   <main>
     <div id="courseDetails" class="course-details">
       <div id="completionBar">
         <div id="completionProgress"></div>
       </div>
-      <button id="certificateBtn" style="display: flex;">Get Certificate</button>
+      <button id="certificateBtn">Get Certificate</button>
       <div class="video-container" id="videoContainer"></div>
-      <div id="ratingSection" style="margin-top: 2rem; text-align: center;">
+      <div id="ratingSection">
         <h3>Rate this Course</h3>
         <div id="ratingStars">
           <span class="star" data-rating="1">&#9733;</span>
@@ -150,240 +361,203 @@
           <span class="star" data-rating="4">&#9733;</span>
           <span class="star" data-rating="5">&#9733;</span>
         </div>
-        <button id="submitRating" style="margin-top: 1rem;">Submit Rating</button>
+        <button id="submitRating">Submit Rating</button>
       </div>
     </div>
   </main>
 
   <script>
-const apiKey = 'AIzaSyAJtx7qkZUPFmu70XA2LQHfzbwmK6RBpxs'; // Replace with your YouTube API key
+    const apiKey = 'AIzaSyAJtx7qkZUPFmu70XA2LQHfzbwmK6RBpxs'; // Replace with your YouTube API key
 
-// Fetch video details (title) from YouTube API
-async function fetchVideoDetails(videoId) {
-  const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  return data.items[0].snippet.title; // Return the video title
-}
-
-// Fetch course details based on the courseId in the URL
-async function loadCourseDetails() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const courseId = urlParams.get('courseId');
-
-  if (!courseId) {
-    alert('Course ID not found in URL.');
-    return;
-  }
-
-  try {
-    const response = await fetch(`/courses/${courseId}`);
-    const data = await response.json();
-
-    if (data.success) {
-      const course = data.course;
-      const courseDetails = document.getElementById('courseDetails');
-
-      // Calculate average rating
-      const averageRating = course.ratings.length > 0
-        ? (course.ratings.reduce((sum, r) => sum + r.rating, 0) / course.ratings.length)
-        : 0;
-      const fullStars = Math.round(averageRating);
-      const ratingStars = '&#9733;'.repeat(fullStars) + '&#9734;'.repeat(5 - fullStars);
-
-      // Display course details
-      courseDetails.innerHTML = `
-        <div class="course-image" style="background-image: url('${course.image}')"></div>
-        <h1>${course.title}</h1>
-        <p class="course-description">${course.description}</p>
-        <div class="course-meta">
-          <div class="course-rating">
-            ${course.ratings.length > 0 ? `Rating: ${ratingStars} (${course.ratings.length} reviews)` : 'No ratings yet'}
-          </div>
-          <div class="course-cost">
-            ${course.creditsRequired === 0 ? 'Free' : `Cost: ${course.creditsRequired} Credits`}
-          </div>
-        </div>
-        <div id="completionBar">
-          <div id="completionProgress"></div>
-        </div>
-        <button id="certificateBtn">Get Certificate</button>
-        <div class="video-container" id="videoContainer"></div>
-      `;
-
-      // Fetch user's completion progress from the backend
-      const userProgressResponse = await fetch(`/user-progress?courseId=${courseId}`, { credentials: 'include' });
-      const userProgressData = await userProgressResponse.json();
-
-      if (userProgressData.success) {
-        const completionPercentage = (userProgressData.completion / course.videos.length) * 100;
-        document.getElementById('completionProgress').style.width = `${completionPercentage}%`;
-
-        // Update the certificate button behavior based on completion status
-        const certificateBtn = document.getElementById('certificateBtn');
-        if (completionPercentage >= 100) {
-          certificateBtn.addEventListener('click', () => {
-            window.location.href = `test.html?courseId=${courseId}`;
-          });
-        } else {
-          certificateBtn.addEventListener('click', () => {
-            alert('Please complete the course to get your certificate.');
-          });
-        }
-      }
-
-      // Fetch and display video thumbnails with titles
-      const videoContainer = document.getElementById('videoContainer');
-      for (let i = 0; i < course.videos.length; i++) {
-        const videoId = course.videos[i];
-        const videoTitle = await fetchVideoDetails(videoId);
-
-        const videoThumbnail = document.createElement('div');
-        videoThumbnail.className = 'video-thumbnail';
-        videoThumbnail.dataset.videoId = videoId;
-        videoThumbnail.innerHTML = `
-          <img src="https://img.youtube.com/vi/${videoId}/0.jpg" alt="Video Thumbnail">
-          <h3>${i + 1}. ${videoTitle}</h3>
-        `;
-        videoContainer.appendChild(videoThumbnail);
-
-        videoThumbnail.addEventListener('click', async () => {
-          const response = await fetch('/add-to-history', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ videoId, title: videoTitle, thumbnail: `https://img.youtube.com/vi/${videoId}/0.jpg`, courseId }),
-            credentials: 'include'
-          });
-
-          if (response.ok) {
-            window.location.href = `player.html?videoId=${videoId}`;
-          } else {
-            alert('Error updating completion progress.');
-          }
-        });
-      }
-
-      // Add rating section
-      const ratingSection = document.createElement('div');
-      ratingSection.id = 'ratingSection';
-      ratingSection.style.marginTop = '2rem';
-      ratingSection.style.textAlign = 'center';
-      ratingSection.innerHTML = `
-        <h3>Rate this Course</h3>
-        <div id="ratingStars">
-          <span class="star" data-rating="1">&#9733;</span>
-          <span class="star" data-rating="2">&#9733;</span>
-          <span class="star" data-rating="3">&#9733;</span>
-          <span class="star" data-rating="4">&#9733;</span>
-          <span class="star" data-rating="5">&#9733;</span>
-        </div>
-        <button id="submitRating" style="margin-top: 1rem;">Submit Rating</button>
-      `;
-      courseDetails.appendChild(ratingSection);
-
-      // Add star rating interaction
-      document.querySelectorAll('.star').forEach(star => {
-        star.addEventListener('click', function() {
-          document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
-          this.classList.add('active');
-        });
-      });
-
-      // Handle rating submission
-      document.getElementById('submitRating').addEventListener('click', async function() {
-        const selectedRating = document.querySelector('.star.active')?.dataset.rating;
-        if (!selectedRating) {
-          alert('Please select a rating.');
-          return;
-        }
-
-        const username = (await fetch('/check-login', { credentials: 'include' }).then(res => res.json())).username;
-        if (!username) {
-          alert('You must be logged in to rate this course.');
-          return;
-        }
-
-        const response = await fetch('/submit-rating', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ courseId, username, rating: selectedRating }),
-          credentials: 'include'
-        });
-
-        const data = await response.json();
-        if (data.success) {
-          alert('Rating submitted successfully!');
-          loadCourseDetails(); // Refresh course details
-        } else {
-          alert('Error submitting rating.');
-        }
-      });
-    } else {
-      alert('Error fetching course details.');
+    // Fetch video details (title) from YouTube API
+    async function fetchVideoDetails(videoId) {
+      const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.items[0].snippet.title; // Return the video title
     }
-  } catch (error) {
-    console.error('Error loading course details:', error);
-    alert('Error loading course details. Please try again.');
-  }
-}
-// Handle rating submission
-document.getElementById('submitRating').addEventListener('click', async function() {
-  const selectedRating = document.querySelector('.star.active')?.dataset.rating;
-  if (!selectedRating) {
-    alert('Please select a rating.');
-    return;
-  }
 
-  const username = (await fetch('/check-login', { credentials: 'include' }).then(res => res.json())).username;
-  if (!username) {
-    alert('You must be logged in to rate this course.');
-    return;
-  }
+    // Fetch course details based on the courseId in the URL
+    async function loadCourseDetails() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const courseId = urlParams.get('courseId');
 
-  const courseId = new URLSearchParams(window.location.search).get('courseId');
-  const response = await fetch('/submit-rating', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ courseId, username, rating: selectedRating }),
-    credentials: 'include'
-  });
+      if (!courseId) {
+        alert('Course ID not found in URL.');
+        return;
+      }
 
-  const data = await response.json();
-  if (data.success) {
-    alert('Rating submitted successfully!');
-    loadCourseDetails(); // Refresh course details
-  } else {
-    alert('Error submitting rating.');
-  }
-});
+      try {
+        const response = await fetch(`/courses/${courseId}`);
+        const data = await response.json();
 
-// Add star rating interaction
-document.querySelectorAll('.star').forEach(star => {
-  star.addEventListener('click', function() {
-    document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
+        if (data.success) {
+          const course = data.course;
+          const courseDetails = document.getElementById('courseDetails');
 
-async function updateNavBar() {
-  const response = await fetch('/check-login', { credentials: 'include' });
-  const data = await response.json();
+          // Calculate average rating
+          const averageRating = course.ratings.length > 0
+            ? (course.ratings.reduce((sum, r) => sum + r.rating, 0) / course.ratings.length)
+            : 0;
+          const fullStars = Math.round(averageRating);
+          const ratingStars = '&#9733;'.repeat(fullStars) + '&#9734;'.repeat(5 - fullStars);
 
-  const authLink = document.getElementById('authLink');
-  if (data.loggedIn) {
-    authLink.innerHTML = '<a href="profile.html">Profile</a>';
-  } else {
-    authLink.innerHTML = '<a href="login.html">Login</a>';
-  }
-}
+          // Display course details at the top
+          courseDetails.insertAdjacentHTML('afterbegin', `
+            <div class="course-image" style="background-image: url('${course.image}')"></div>
+            <h1>${course.title}</h1>
+            <p class="course-description">${course.description}</p>
+            <div class="course-meta">
+              <div class="course-rating">
+                ${course.ratings.length > 0 ? `Rating: ${ratingStars} (${course.ratings.length} reviews)` : 'No ratings yet'}
+              </div>
+              <div class="course-cost">
+                ${course.creditsRequired === 0 ? 'Free' : `Cost: ${course.creditsRequired} Credits`}
+              </div>
+            </div>
+          `);
 
-// Call this function on page load
-window.onload = function () {
-  updateNavBar();
-  loadCourseDetails();
-};
+          // Fetch user's completion progress from the backend
+          const userProgressResponse = await fetch(`/user-progress?courseId=${courseId}`, { credentials: 'include' });
+          const userProgressData = await userProgressResponse.json();
+
+          if (userProgressData.success) {
+            const completionPercentage = (userProgressData.completion / course.videos.length) * 100;
+            document.getElementById('completionProgress').style.width = `${completionPercentage}%`;
+
+            // Update the certificate button behavior based on completion status
+            const certificateBtn = document.getElementById('certificateBtn');
+            if (completionPercentage >= 100) {
+              certificateBtn.addEventListener('click', () => {
+                window.location.href = `test.html?courseId=${courseId}`;
+              });
+            } else {
+              certificateBtn.addEventListener('click', () => {
+                alert(`Please complete the course to get your certificate (${Math.round(completionPercentage)}% completed).`);
+              });
+            }
+          }
+
+          // Fetch and display video thumbnails with titles
+          const videoContainer = document.getElementById('videoContainer');
+          for (let i = 0; i < course.videos.length; i++) {
+            const videoId = course.videos[i];
+            const videoTitle = await fetchVideoDetails(videoId);
+
+            const videoThumbnail = document.createElement('div');
+            videoThumbnail.className = 'video-thumbnail';
+            videoThumbnail.dataset.videoId = videoId;
+            videoThumbnail.innerHTML = `
+              <span class="video-number">${i + 1}</span>
+              <img src="https://img.youtube.com/vi/${videoId}/0.jpg" alt="Video Thumbnail">
+              <h3>${videoTitle}</h3>
+            `;
+            videoContainer.appendChild(videoThumbnail);
+
+            videoThumbnail.addEventListener('click', async () => {
+              const response = await fetch('/add-to-history', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                  videoId, 
+                  title: videoTitle, 
+                  thumbnail: `https://img.youtube.com/vi/${videoId}/0.jpg`, 
+                  courseId 
+                }),
+                credentials: 'include'
+              });
+
+              if (response.ok) {
+                window.location.href = `player.html?videoId=${videoId}`;
+              } else {
+                alert('Error updating completion progress.');
+              }
+            });
+          }
+
+          // Add star rating interaction
+          document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+              document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+              this.classList.add('active');
+            });
+          });
+
+          // Handle rating submission
+          document.getElementById('submitRating').addEventListener('click', async function() {
+            const selectedRating = document.querySelector('.star.active')?.dataset.rating;
+            if (!selectedRating) {
+              alert('Please select a rating.');
+              return;
+            }
+
+            const username = (await fetch('/check-login', { credentials: 'include' }).then(res => res.json())).username;
+            if (!username) {
+              alert('You must be logged in to rate this course.');
+              return;
+            }
+
+            const response = await fetch('/submit-rating', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ courseId, username, rating: selectedRating }),
+              credentials: 'include'
+            });
+
+            const data = await response.json();
+            if (data.success) {
+              alert('Rating submitted successfully!');
+              loadCourseDetails(); // Refresh course details
+            } else {
+              alert('Error submitting rating.');
+            }
+          });
+        } else {
+          alert('Error fetching course details.');
+        }
+      } catch (error) {
+        console.error('Error loading course details:', error);
+        alert('Error loading course details. Please try again.');
+      }
+    }
+
+    async function updateNavBar() {
+      const response = await fetch('/check-login', { credentials: 'include' });
+      const data = await response.json();
+
+      const authLink = document.getElementById('authLink');
+      if (data.loggedIn) {
+        authLink.innerHTML = '<a href="profile.html">Profile</a>';
+      } else {
+        authLink.innerHTML = '<a href="login.html">Login</a>';
+      }
+    }
+
+    // Initialize sidebar toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.querySelector('.hamburger');
+      const sidebar = document.querySelector('.sidebar');
+      
+      hamburger.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+      });
+
+      function checkScreenSize() {
+        if (window.innerWidth <= 768) {
+          sidebar.classList.remove('active');
+        } else {
+          sidebar.classList.add('active');
+        }
+      }
+      
+      checkScreenSize();
+      window.addEventListener('resize', checkScreenSize);
+
+      updateNavBar();
+      loadCourseDetails();
+    });
   </script>
 </body>
 </html>
