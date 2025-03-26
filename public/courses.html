@@ -7,7 +7,7 @@
   <script src="https://kit.fontawesome.com/8831557fe7.js" crossorigin="anonymous"></script>
   <title>Interactive Courses Platform</title>
   <style>
-    /* Header Styles */
+    /* Header Styles (unchanged) */
     .headerr {
       position: fixed;
       top: 0;
@@ -22,7 +22,7 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* Sidebar Styles */
+    /* Sidebar Styles (unchanged) */
     .sidebar {
       position: fixed;
       left: 0;
@@ -77,112 +77,23 @@
       font-weight: 500;
     }
 
-    /* Main Content Styles */
+    /* Main Content Styles (unchanged) */
     main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       margin-left: 250px; /* Same as sidebar width */
       padding-top: 78px; /* Account for fixed header */
       transition: margin-left 0.3s ease;
     }
 
-    /* Course Search Bar Styles */
-    .course-search-container {
-      display: flex;
-      justify-content: center;
-      margin: 2rem auto;
-      max-width: 600px;
-    }
-
-    #courseSearchForm {
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-      max-height: 42px;
-    }
-
-    #courseSearchInput {
-      padding: 20px 20px;
-      border-radius: 30px 0 0 30px;
-      border: 1px solid #ddd;
-      outline: none;
-      width: 100%;
-      font-size: 16px;
-    }
-
-    #courseSearchButton {
-      background: #0B808D;
-      color: white;
-      border: none;
-      padding: 0 20px;
-      border-radius: 0 30px 30px 0;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    #courseSearchButton:hover {
-      background: #096b75;
-    }
-
     /* Modern CSS Styles */
-    /* Add Course Form Styles */
-    #addCourseForm {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      margin-top: 1rem;
-    }
-
-    #addCourseForm input,
-    #addCourseForm textarea {
-      width: 100%;
-      padding: 0.8rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-      color: var(--text-color);
-    }
-
-    #addCourseForm textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    #addCourseForm button[type="submit"] {
-      background: var(--secondary-color);
-      color: white;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    #addCourseForm button[type="submit"]:hover {
-      background: #2980b9;
-    }
-
-    #addCourseBtn {
-      background: var(--secondary-color);
-      color: white;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    #addCourseBtn:hover {
-      background: #2980b9;
-    }
     :root {
       --primary-color: #2c3e50;
       --secondary-color: #3498db;
       --accent-color: #e74c3c;
       --text-color: #2c3e50;
-      --light-bg: #ecf0f1;
+      --light-bg: #f8fafc;
     }
 
     body {
@@ -199,47 +110,66 @@
       margin-bottom: 2.5rem;
     }
 
+    /* Modern Course Grid Styles */
     .courses-grid {
       display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 2rem;
-      padding: 1rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
     .course-card {
       background: white;
-      border-radius: 15px;
+      border-radius: 12px;
       overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       position: relative;
       cursor: pointer;
-      min-width: 18rem;
+      display: flex;
+      flex-direction: column;
       max-width: 20rem;
-      display: grid;
+      min-width: 20rem;
     }
 
     .course-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
     }
 
     .course-image {
-      height: 200px;
+      height: 160px;
       background-size: cover;
       background-position: center;
       position: relative;
+      overflow: hidden;
+    }
+
+    .course-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%);
     }
 
     .course-content {
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      justify-content: space-around;
+      flex-grow: 1;
     }
 
     .course-title {
-      font-size: 1.3rem;
-      margin: 0 0 1rem;
+      font-size: 1.25rem;
+      margin: 0 0 0.75rem;
       color: var(--primary-color);
+      font-weight: 600;
+      line-height: 1.4;
     }
 
     .course-description {
@@ -248,104 +178,315 @@
       line-height: 1.5;
       margin-bottom: 1.5rem;
       display: -webkit-box;
-      -webkit-line-clamp: 3; /* Limit to 3 lines */
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
+      flex-grow: 1;
     }
+
+    .course-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .course-rating {
+      color: #FFC107;
+      font-weight: 500;
+    }
+
+    .enrollment-count {
+      color: #666;
+      font-size: 0.8rem;
+      margin-left: 0.25rem;
+    }
+
+    .course-cost {
+      background: #f0f8ff;
+      color: var(--secondary-color);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
     .bothbuttons {
+      display: flex;
+      gap: 0.75rem;
       margin-top: auto;
     }
 
-    .course-detail {
-      display: none;
-      margin-top: 2rem;
+    .enroll-btn {
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      font-weight: 500;
+      flex: 1;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .enroll-btn:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+    }
+
+    .enroll-btn i {
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    /* New Badge */
+    .new-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--accent-color);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 1;
+    }
+
+    /* Modern Search & Filter Styles */
+    .course-search-container {
+      display: flex;
+      justify-content: center;
+      margin: 2rem auto;
+      max-width: 700px;
+      padding: 0 2rem;
+    }
+
+    #courseSearchForm {
+      display: flex;
+      padding: 0;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border-radius: 50px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      background-color: white;
+    }
+
+    #courseSearchForm:focus-within {
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    #courseSearchInput {
+      border: none;
+      padding: 0 1rem 0 1rem;
+      outline: none;
+      width: 100%;
+      height: 100%;
+      font-size: 1rem;
       background: white;
+    }
+    ::placeholder{
+      color: #838383;
+    }
+
+    #courseSearchButton {
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 0 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #courseSearchButton:hover {
+      background: #096b75;
+    }
+
+    /* Modern Filter Controls */
+    #sortFilterControls {
+      margin: 1.5rem auto 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      max-width: 800px;
+      padding: 0 2rem;
+    }
+
+    #sortFilterControls > div {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    #sortFilterControls label {
+      font-weight: 500;
+      color: var(--primary-color);
+      font-size: 0.95rem;
+    }
+
+    #sortFilterControls select {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #sortFilterControls select:hover {
+      border-color: #bbb;
+    }
+
+    #sortFilterControls select:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+
+    /* Modern Add Course Button */
+    #addCourseBtn {
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      margin: 2rem auto;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+    }
+
+    #addCourseBtn:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+    }
+
+    /* Modern Course Detail Styles */
+    .course-detail {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      z-index: 1000;
+      overflow-y: auto;
       padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
 
     .course-detail.active {
       display: block;
+      animation: fadeIn 0.3s ease;
     }
 
-    .video-container {
-      display: grid;
-      gap: 1rem;
-      margin-top: 1.5rem;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
-    .video-container iframe {
-      width: 100%;
-      height: 200px;
-      border: none;
-      border-radius: 10px;
-    }
-
-    .test-section {
-      margin-top: 3rem;
-      text-align: center;
-    }
-
-    .test-btn {
-      background: var(--accent-color);
-      color: white;
-      border: none;
-      padding: 1rem 2rem;
-      font-size: 1.1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .test-btn:hover {
-      background: #c0392b;
-    }
-
-    .test-result {
-      margin-top: 1rem;
-      font-size: 1.1rem;
-      color: var(--primary-color);
-    }
-
-    .test-questions {
-      margin-top: 2rem;
-      text-align: left;
-    }
-
-    .test-questions h3 {
-      color: var(--primary-color);
-      margin-bottom: 1rem;
-    }
-
-    .test-questions label {
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
-    .test-questions input[type="radio"] {
-      margin-right: 0.5rem;
+    .course-detail > div {
+      background: white;
+      border-radius: 12px;
+      padding: 2.5rem;
+      max-width: 900px;
+      margin: 2rem auto;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
     .back-btn {
-      background: var(--primary-color);
-      color: white;
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: #f0f0f0;
+      color: var(--primary-color);
       border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
       cursor: pointer;
-      margin-bottom: 1rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
     }
 
     .back-btn:hover {
-      background: #1a252f;
+      background: #e0e0e0;
     }
 
+    /* Add Course Form Styles */
+    #addCourseForm {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      margin: 1rem auto;
+      max-width: 800px;
+    }
+
+    #addCourseForm input,
+    #addCourseForm textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: var(--text-color);
+      transition: all 0.2s ease;
+    }
+
+    #addCourseForm input:focus,
+    #addCourseForm textarea:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+
+    #addCourseForm textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    #addCourseForm button[type="submit"] {
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    #addCourseForm button[type="submit"]:hover {
+      background: #2980b9;
+    }
+
+    /* Test Question Styles */
     .test-question {
       margin-bottom: 1.5rem;
       padding: 1rem;
-      border: 1px solid #ddd;
+      border: 1px solid #eee;
       border-radius: 8px;
       background: #f9f9f9;
     }
@@ -358,11 +499,7 @@
       border-radius: 4px;
     }
 
-    .test-question input[type="text"]::placeholder {
-      color: #999;
-    }
-
-    /* Hamburger Menu */
+    /* Hamburger Menu (unchanged) */
     .hamburger {
       display: none;
       cursor: pointer;
@@ -418,7 +555,18 @@
       .course-search-container{
         width: 60%;
       }
-
+      .courses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        padding: 1rem;
+      }
+      #sortFilterControls {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      .course-detail > div {
+        padding: 1.5rem;
+      }
     }
 
     @media (max-width: 576px) {
@@ -437,7 +585,15 @@
       .sidebar{
         top: 69px;
       }
-      
+      .courses-grid {
+        grid-template-columns: 1fr;
+      }
+      .bothbuttons {
+        flex-direction: column;
+      }
+      .enroll-btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -474,7 +630,7 @@
     </div>
 
     <!-- Sorting and Filtering Controls -->
-    <div id="sortFilterControls" style="margin-bottom: 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+    <div id="sortFilterControls">
       <!-- Sorting Dropdown -->
       <div>
         <label for="sortBy">Sort By:</label>
@@ -501,7 +657,7 @@
     <!-- Add Course Button (only for admin) -->
     <div id="addCourseSection" style="display: none;">
       <button id="addCourseBtn" onclick="showAddCourseForm()">Add Course</button>
-      <div id="addCourseForm" style="display: none; margin-top: 1rem;">
+      <div id="addCourseForm" style="display: none;">
         <form onsubmit="event.preventDefault(); addCourse();">
           <input type="text" id="courseTitle" placeholder="Course Title" required>
           <textarea id="courseDescription" placeholder="Course Description" required></textarea>
@@ -534,14 +690,27 @@
   
     <!-- Course Detail Section -->
     <div id="courseDetail" class="course-detail">
-      <button class="back-btn" onclick="hideCourseDetail()">Close</button>
-      <h2 id="detailCourseTitle"></h2>
-      <p id="detailCourseDescription"></p>
-      <div class="video-container" id="detailCourseVideos"></div>
+      <div>
+        <button class="back-btn" onclick="hideCourseDetail()">
+          <i class="fas fa-times"></i> Close
+        </button>
+        <h2 id="detailCourseTitle"></h2>
+        <p id="detailCourseDescription"></p>
+        <div class="video-container" id="detailCourseVideos"></div>
+      </div>
     </div>
   </main>
 
   <script>
+    // Helper function to check if a course is new
+    function isNewCourse(createdAt) {
+      if (!createdAt) return false;
+      const courseDate = new Date(createdAt);
+      const now = new Date();
+      const diffDays = Math.floor((now - courseDate) / (1000 * 60 * 60 * 24));
+      return diffDays <= 7; // Show "New" badge for courses created in the last 7 days
+    }
+
     // Enroll in a course
     async function enrollCourse(courseId) {
       const response = await fetch('/check-login', { credentials: 'include' });
@@ -642,21 +811,28 @@
           const card = document.createElement('div');
           card.className = 'course-card';
           card.innerHTML = `
-            <div class="course-image" style="background-image: url('${course.image}')"></div>
+            <div class="course-image" style="background-image: url('${course.image}')">
+              ${isNewCourse(course.createdAt) ? '<span class="new-badge">New</span>' : ''}
+            </div>
             <div class="course-content">
               <h3 class="course-title">${course.title}</h3>
               <p class="course-description">${course.description}</p>
               <div class="course-meta">
                 <div class="course-rating">
-                  ${getRatingStars(course.ratings)} <!-- Display stars based on average rating -->
+                  ${getRatingStars(course.ratings)}
+                  <span class="enrollment-count">(${course.enrollmentCount || 0})</span>
                 </div>
-                <div class="course-cost" style="padding-bottom: 10px">
+                <div class="course-cost">
                   ${course.creditsRequired === 0 ? 'Free' : `${course.creditsRequired} Credits`}
                 </div>
               </div>
-              <div style="display: flex; gap: 10px;" class="bothbuttons">
-                <button class="enroll-btn" onclick="showCourseDetail('${course._id}')">Details</button>
-                <button class="enroll-btn" onclick="enrollCourse('${course._id}')">Enroll Now</button>
+              <div class="bothbuttons">
+                <button class="enroll-btn" onclick="showCourseDetail('${course._id}')">
+                  <i class="fas fa-info-circle"></i> Details
+                </button>
+                <button class="enroll-btn" onclick="enrollCourse('${course._id}')">
+                  <i class="fas fa-bookmark"></i> Enroll
+                </button>
               </div>
             </div>
           `;
@@ -694,13 +870,14 @@
           const iframe = document.createElement('iframe');
           iframe.src = `https://www.youtube.com/embed/${videoId}`;
           iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+          iframe.allowFullscreen = true;
           detailCourseVideos.appendChild(iframe);
         });
 
         // Add "and more..." text if there are more than two videos
         if (course.videos.length > 2) {
           const moreText = document.createElement('p');
-          moreText.textContent = 'and more...';
+          moreText.textContent = `+ ${course.videos.length - 2} more videos...`;
           moreText.style.textAlign = 'center';
           moreText.style.marginTop = '1rem';
           detailCourseVideos.appendChild(moreText);
@@ -710,7 +887,8 @@
         const enrollButton = document.createElement('button');
         enrollButton.textContent = 'Enroll Now';
         enrollButton.className = 'enroll-btn';
-        enrollButton.style.marginTop = '1rem';
+        enrollButton.style.margin = '1.5rem auto 0';
+        enrollButton.style.padding = '0.8rem 2rem';
         enrollButton.onclick = () => enrollCourse(courseId);
         detailCourseVideos.appendChild(enrollButton);
 
@@ -720,7 +898,7 @@
 
     // Hide course details
     function hideCourseDetail() {
-      document.getElementById('courseDetail').classclassList.remove('active');
+      document.getElementById('courseDetail').classList.remove('active');
     }
 
     // Show the "Add Course" form
@@ -765,6 +943,7 @@
       const data = await response.json();
       if (data.success) {
         alert('Course added successfully!');
+        document.getElementById('addCourseForm').style.display = 'none';
         loadCourses(); // Refresh the course list
       } else {
         alert('Error adding course.');
