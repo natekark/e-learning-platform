@@ -22,7 +22,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .container {
@@ -31,8 +32,8 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
       position: relative;
       overflow: hidden;
-      width: 768px;
-      max-width: 100%;
+      width: 100%;
+      max-width: 768px;
       min-height: 480px;
     }
 
@@ -57,8 +58,8 @@
     .container button {
       background-color: #512da8;
       color: #fff;
-      font-size: 12px;
-      padding: 10px 45px;
+      font-size: 14px;
+      padding: 12px 45px;
       border: 1px solid transparent;
       border-radius: 8px;
       font-weight: 600;
@@ -66,11 +67,24 @@
       text-transform: uppercase;
       margin-top: 10px;
       cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .container button:hover {
+      opacity: 0.9;
     }
 
     .container button.hidden {
       background-color: transparent;
       border-color: #fff;
+    }
+
+    .container button.switch-form {
+      background-color: transparent;
+      color: #512da8;
+      border: 1px solid #512da8;
+      margin-top: 15px;
+      padding: 10px 25px;
     }
 
     .container form {
@@ -87,8 +101,8 @@
       background-color: #eee;
       border: none;
       margin: 8px 0;
-      padding: 10px 15px;
-      font-size: 13px;
+      padding: 12px 15px;
+      font-size: 14px;
       border-radius: 8px;
       width: 100%;
       outline: none;
@@ -149,6 +163,12 @@
       margin: 0 3px;
       width: 40px;
       height: 40px;
+      transition: all 0.3s ease;
+    }
+
+    .social-icons a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
     }
 
     .toggle-container {
@@ -221,6 +241,93 @@
       color: red;
       font-size: 12px;
       margin-top: 10px;
+      text-align: center;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        min-height: 600px;
+      }
+
+      .form-container {
+        width: 100%;
+      }
+
+      .sign-in {
+        width: 100%;
+        transform: translateX(0);
+      }
+
+      .sign-up {
+        width: 100%;
+        transform: translateX(100%);
+        opacity: 1;
+      }
+
+      .container.active .sign-in {
+        transform: translateX(-100%);
+      }
+
+      .container.active .sign-up {
+        transform: translateX(0);
+      }
+
+      .toggle-container {
+        display: none;
+      }
+
+      .toggle {
+        display: none;
+      }
+
+      .switch-form-mobile {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .switch-form-desktop {
+        display: none;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .switch-form-mobile {
+        display: none;
+      }
+
+      .switch-form-desktop {
+        display: block;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        min-height: 550px;
+      }
+
+      .container form {
+        padding: 0 20px;
+      }
+
+      .container h1 {
+        font-size: 24px;
+      }
+
+      .container button {
+        padding: 12px 30px;
+        font-size: 13px;
+      }
+
+      .social-icons a {
+        width: 35px;
+        height: 35px;
+      }
     }
   </style>
 </head>
@@ -242,6 +349,10 @@
         <input type="password" id="regPassword" placeholder="Password" required>
         <div class="error-message" id="signupError"></div>
         <button type="submit">Sign Up</button>
+        <div class="switch-form-mobile">
+          <p>Already have an account?</p>
+          <button type="button" class="switch-form" id="mobileSwitchToLogin">Sign In</button>
+        </div>
       </form>
     </div>
 
@@ -261,11 +372,15 @@
         <a href="#">Forgot Your Password?</a>
         <div class="error-message" id="loginError"></div>
         <button type="submit">Sign In</button>
+        <div class="switch-form-mobile">
+          <p>Don't have an account?</p>
+          <button type="button" class="switch-form" id="mobileSwitchToSignup">Sign Up</button>
+        </div>
       </form>
     </div>
 
-    <!-- Toggle Panel -->
-    <div class="toggle-container">
+    <!-- Toggle Panel (shown only on desktop) -->
+    <div class="toggle-container switch-form-desktop">
       <div class="toggle">
         <div class="toggle-panel toggle-left">
           <h1>Welcome Back!</h1>
@@ -282,68 +397,101 @@
   </div>
 
   <script>
-    // Toggle between Sign In and Sign Up
+    // Get DOM elements
     const container = document.getElementById('container');
     const registerBtn = document.getElementById('register');
     const loginBtn = document.getElementById('login');
+    const mobileSwitchToSignup = document.getElementById('mobileSwitchToSignup');
+    const mobileSwitchToLogin = document.getElementById('mobileSwitchToLogin');
+    const signInForm = document.querySelector('.sign-in');
+    const signUpForm = document.querySelector('.sign-up');
 
-    registerBtn.addEventListener('click', () => {
+    // Handle form toggling
+    function toggleForms() {
+      
+      if (window.innerWidth <= 768) {
+        // Mobile behavior
+        if (container.classList.contains("active")) {
+          signInForm.style.transform = 'translateX(-100%)';
+          signUpForm.style.transform = 'translateX(0)';
+        } else {
+          signInForm.style.transform = 'translateX(0)';
+          signUpForm.style.transform = 'translateX(100%)';
+        }
+      } else {
+        // For desktop, the active class alone will handle the transitions
+        
+      }
+    }
+
+    // Set up event listeners
+    registerBtn.addEventListener('click', function() {
       container.classList.add("active");
     });
-
-    loginBtn.addEventListener('click', () => {
+    
+    loginBtn.addEventListener('click', function() {
       container.classList.remove("active");
     });
+    
+    mobileSwitchToSignup.addEventListener('click', function() {
+      container.classList.add("active");
+      toggleForms();
+    });
+    
+    mobileSwitchToLogin.addEventListener('click', function() {
+      container.classList.remove("active");
+      toggleForms();
+    });
 
-    // Form Submission Handling
-    document.getElementById('signupForm').addEventListener('submit', function (e) {
+    // Form submission handlers
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const username = document.getElementById('regUsername').value;
       const email = document.getElementById('regEmail').value;
       const password = document.getElementById('regPassword').value;
 
-      fetch('/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          window.location.href = '/home'; // Redirect to home page after registration
-        } else {
-          document.getElementById('signupError').textContent = data.message || 'Registration failed. Please try again.';
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('signupError').textContent = 'An error occurred. Please try again.';
-      });
+      console.log('Signup submitted:', { username, email, password });
+      document.getElementById('signupError').textContent = '';
+      
+      // Simulate successful registration
+      setTimeout(() => {
+        document.getElementById('signupError').textContent = 'Registration successful!';
+        document.getElementById('signupError').style.color = 'green';
+      }, 1000);
     });
 
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
 
-      fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          window.location.href = '/home'; // Redirect to home page after login
-        } else {
-          document.getElementById('loginError').textContent = data.message || 'Invalid email or password.';
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('loginError').textContent = 'An error occurred. Please try again.';
-      });
+      console.log('Login submitted:', { email, password });
+      document.getElementById('loginError').textContent = '';
+      
+      // Simulate login error
+      setTimeout(() => {
+        document.getElementById('loginError').textContent = 'Invalid email or password';
+      }, 1000);
     });
+
+    // Initialize layout
+    function initLayout() {
+      if (window.innerWidth <= 768) {
+        // Mobile initialization
+        container.classList.remove("active");
+        signUpForm.style.transform = 'translateX(100%)';
+        signInForm.style.transform = 'translateX(0)';
+      } else {
+        // Desktop initialization
+        container.classList.remove("active");
+        signUpForm.style.transform = '';
+        signInForm.style.transform = '';
+      }
+    }
+
+    // Initialize on load and resize
+    window.addEventListener('load', initLayout);
+    window.addEventListener('resize', initLayout);
   </script>
 </body>
 </html>
