@@ -449,7 +449,7 @@
       const username = document.getElementById('regUsername').value;
       const email = document.getElementById('regEmail').value;
       const password = document.getElementById('regPassword').value;
-
+      
       console.log('Signup submitted:', { username, email, password });
       document.getElementById('signupError').textContent = '';
       
@@ -458,6 +458,23 @@
         document.getElementById('signupError').textContent = 'Registration successful!';
         document.getElementById('signupError').style.color = 'green';
       }, 1000);
+      fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = '/home'; // Redirect to home page after registration
+        } else {
+          document.getElementById('signupError').textContent = data.message || 'Registration failed. Please try again.';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('signupError').textContent = 'An error occurred. Please try again.';
+      });
     });
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -472,6 +489,23 @@
       setTimeout(() => {
         document.getElementById('loginError').textContent = 'Invalid email or password';
       }, 1000);
+      fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = '/home'; // Redirect to home page after login
+        } else {
+          document.getElementById('loginError').textContent = data.message || 'Invalid email or password.';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('loginError').textContent = 'An error occurred. Please try again.';
+      });
     });
 
     // Initialize layout

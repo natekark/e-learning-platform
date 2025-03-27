@@ -122,12 +122,11 @@
       display: flex;
       flex-direction: column;
       background: var(--bg-primary);
-      padding: var(--space-xl);
       border-radius: var(--border-radius);
       box-shadow: var(--shadow-sm);
       margin: 0 auto;
-
       max-width: 1200px;
+      width: 100%;
     }
 
     .course-image {
@@ -144,11 +143,12 @@
       font-size: 1.1rem;
       line-height: 1.8;
       color: var(--text-secondary);
-      margin-bottom: var(--space-xl);
+      margin: var(--space-xl);
       padding: var(--space-md);
       background-color: var(--bg-secondary);
       border-radius: var(--border-radius);
       border-left: 4px solid var(--primary-color);
+      box-sizing: border-box;
     }
 
     .course-meta {
@@ -158,9 +158,12 @@
       padding: var(--space-md);
       background-color: var(--bg-secondary);
       border-radius: var(--border-radius);
+      flex-wrap: wrap;
+      gap: var(--space-md);
     }
 
     .video-container {
+      margin: 1rem;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
       gap: var(--space-md);
@@ -208,7 +211,9 @@
     }
 
     #completionBar {
-      width: 100%;
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
       background-color: #e0e0e0;
       border-radius: var(--border-radius);
       margin-bottom: var(--space-lg);
@@ -262,6 +267,7 @@
     }
 
     #submitRating {
+      margin-top: 1rem;
       padding: var(--space-sm) var(--space-md);
       background-color: var(--primary-color);
       color: white;
@@ -300,9 +306,16 @@
       main {
         margin-left: 0;
         margin-top: 4rem;
+        padding: var(--space-md);
       }
       .video-container {
         grid-template-columns: 1fr;
+      }
+      .course-details {
+        padding: var(--space-md);
+      }
+      .course-image {
+        height: 200px;
       }
     }
 
@@ -311,17 +324,25 @@
         font-size: 1.5rem;
       }
       main {
-        padding-top: 69px;
+        margin-top: 69px;
+        padding: var(--space-sm);
       }
       .sidebar {
         top: 69px;
       }
-      .course-image {
-        height: 200px;
-      }
       .course-meta {
         flex-direction: column;
         gap: var(--space-sm);
+      }
+      .video-thumbnail img {
+        height: 150px;
+      }
+      .video-thumbnail h3 {
+        font-size: 0.9rem;
+        padding: var(--space-sm);
+      }
+      #certificateBtn {
+        padding: var(--space-sm) var(--space-lg);
       }
     }
   </style>
